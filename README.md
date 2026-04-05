@@ -1,20 +1,21 @@
-# Epidemiological Climate Toolkit
+# Climate Epidemiology Modeling Toolkit
 
-A Python toolkit for analyzing climate data in epidemiological research. Fetches meteorological data from satellite-based climate APIs and combines it with health event data for research analysis.
+A Python toolkit for climate data analysis in infectious disease epidemiology modeling. Fetches meteorological data from satellite-based climate APIs and computes comprehensive metrics for epidemiological research.
 
 ## Overview
 
 This toolkit enables researchers and public health professionals to:
 
 - Fetch climate data (temperature, precipitation, humidity, wind speed) for any geographic location
-- Correlate climate factors with health event patterns
-- Support evidence-based epidemiological research
+- Compute 120+ climate metrics including epidemiological indices
+- Correlate climate factors with infectious disease transmission patterns
+- Support evidence-based epidemiological modeling and surveillance
 
 ## Features
 
 - **Satellite Climate Data Integration**: Access 30+ years of climate data globally
-- **Automated Data Fetching**: Batch process multiple locations
-- **Climate Metrics**: Temperature, precipitation, humidity, and wind speed analysis
+- **Comprehensive Metrics**: 120+ computed variables including vector biology indices
+- **Epidemiological Indices**: EIP, vector capacity, transmission risk estimates
 - **Portable Design**: Works on Windows, Linux, and macOS
 
 ## Quick Start
@@ -71,21 +72,24 @@ Prepare a CSV file with the following columns:
 2017-07-10,19.876,75.456,StateName,DistrictName
 ```
 
-## Output
+## Output Variables
 
-The script generates a CSV file with climate data:
+The script generates a CSV with **120+ computed variables**:
 
-| Column | Description |
-|--------|-------------|
-| `Date of Event` | Original event date |
-| `Latitude`, `Longitude` | Location |
-| `Region1`, `Region2` | Administrative divisions |
-| `Climate_Start`, `Climate_End` | Data retrieval window |
-| `Temp_Mean`, `Temp_Min`, `Temp_Max` | Temperature statistics (°C) |
-| `Precip_Total` | Total precipitation (mm) |
-| `Humidity_Mean` | Mean relative humidity (%) |
-| `Wind_Mean` | Mean wind speed (m/s) |
-| `Days_Data` | Number of days of data retrieved |
+| Category | Variables | Description |
+|----------|-----------|-------------|
+| **Metadata** | 7 | Date, Location, Region |
+| **Temperature** | 20 | Mean, min, max, percentiles, weekly, thresholds |
+| **Precipitation** | 18 | Total, days, intensity, streaks, cumulative |
+| **Humidity** | 12 | Mean, min, max, percentiles, weekly |
+| **Wind** | 10 | Mean, max, variability, thresholds |
+| **Interactions** | 12 | Heat index, discomfort, correlations |
+| **Disease Indices** | 12 | EIP, vector survival, transmission risk |
+| **Composites** | 10 | Stress indices, suitability scores |
+| **Temporal** | 10 | Season, month, day of year, lags |
+| **Summary** | 3 | Data quality indicators |
+
+See [docs/OUTPUT_VARIABLES.md](docs/OUTPUT_VARIABLES.md) for complete variable dictionary.
 
 ## Climate Parameters
 
@@ -102,9 +106,10 @@ See [docs/API_REFERENCE.md](docs/API_REFERENCE.md) for detailed API documentatio
 
 This toolkit is designed for:
 
-- **Epidemiological Research**: Study climate-health relationships
-- **Health Surveillance**: Support early warning systems
-- **Public Health Planning**: Inform prevention strategies
+- **Infectious Disease Modeling**: Climate-disease transmission analysis
+- **Epidemiological Research**: Vector biology and climate relationships
+- **Health Surveillance**: Early warning system development
+- **Public Health Planning**: Climate-informed intervention strategies
 - **Academic Research**: Source data for publications
 
 ## Data Sources
@@ -114,7 +119,7 @@ This toolkit is designed for:
 
 ## Ethical Statement
 
-This toolkit is designed for legitimate public health research purposes. Users must:
+This toolkit is designed for legitimate public health research and epidemiological studies. Users must:
 
 - Comply with applicable data protection regulations
 - Attribute data sources appropriately
@@ -128,6 +133,7 @@ See [docs/ETHICS_GUIDELINES.md](docs/ETHICS_GUIDELINES.md) for full guidelines.
 - [Installation Guide](docs/INSTALLATION.md)
 - [Usage Instructions](docs/USAGE.md)
 - [API Reference](docs/API_REFERENCE.md)
+- [Output Variables](docs/OUTPUT_VARIABLES.md)
 - [Ethics Guidelines](docs/ETHICS_GUIDELINES.md)
 
 ## Citation
@@ -135,11 +141,11 @@ See [docs/ETHICS_GUIDELINES.md](docs/ETHICS_GUIDELINES.md) for full guidelines.
 If you use this toolkit in your research, please cite:
 
 ```bibtex
-@software{epidemiological_climate_toolkit,
-  title = {Epidemiological Climate Toolkit},
+@software{climate_epidemiology_modeling,
+  title = {Climate Epidemiology Modeling Toolkit},
   author = {Research Community},
   year = {2024},
-  url = {https://github.com/Infinitysouls/epidemiological-climate-toolkit}
+  url = {https://github.com/Infinitysouls/climate-epidemiology-modeling}
 }
 ```
 
@@ -159,4 +165,4 @@ For questions or issues, please open an issue on GitHub.
 
 ---
 
-*This toolkit is intended for researchers and public health professionals.*
+*This toolkit is intended for researchers and public health professionals in infectious disease epidemiology.*

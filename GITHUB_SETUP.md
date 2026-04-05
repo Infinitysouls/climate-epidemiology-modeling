@@ -18,7 +18,7 @@ cd D:\INSTITUTE_RESEARCH\GitHub_Repo_Package
 gh auth login
 
 # Create repository
-gh repo create epidemiological-climate-toolkit --public --description "Python toolkit for epidemiological climate analysis using satellite-based climate data" --source=. --push --remote=origin
+gh repo create climate-epidemiology-modeling --public --description "Climate data analysis toolkit for infectious disease epidemiology modeling" --source=. --push --remote=origin
 ```
 
 ---
@@ -28,8 +28,8 @@ gh repo create epidemiological-climate-toolkit --public --description "Python to
 ### Step 1: Create Repository on GitHub
 
 1. Go to: https://github.com/new
-2. **Repository name**: `epidemiological-climate-toolkit`
-3. **Description**: `Python toolkit for epidemiological climate analysis using satellite-based climate data`
+2. **Repository name**: `climate-epidemiology-modeling`
+3. **Description**: `Climate data analysis toolkit for infectious disease epidemiology modeling`
 4. **Visibility**: Public
 5. **DO NOT** initialize with README, license, or .gitignore (we already have them)
 6. Click **Create repository**
@@ -41,7 +41,7 @@ In your terminal:
 ```cmd
 cd D:\INSTITUTE_RESEARCH\GitHub_Repo_Package
 
-git remote add origin https://github.com/Infinitysouls/epidemiological-climate-toolkit.git
+git remote add origin https://github.com/Infinitysouls/climate-epidemiology-modeling.git
 git branch -M main
 git push -u origin main
 ```
@@ -51,8 +51,8 @@ git push -u origin main
 ## Option 3: Upload Files Directly
 
 1. Go to: https://github.com/new
-2. Create repository named `epidemiological-climate-toolkit`
-3. Go to: https://github.com/Infinitysouls/epidemiological-climate-toolkit/upload
+2. Create repository named `climate-epidemiology-modeling`
+3. Go to: https://github.com/Infinitysouls/climate-epidemiology-modeling/upload
 4. Drag and drop all files from `D:\INSTITUTE_RESEARCH\GitHub_Repo_Package\`
 5. Commit changes
 
@@ -63,14 +63,14 @@ git push -u origin main
 1. Go to your repository on GitHub
 2. Click **Settings** (gear icon)
 3. Scroll to **Topics**
-4. Add: `public-health`, `epidemiology`, `climate-data`, `python`, `health-surveillance`, `epidemiological-research`
+4. Add: `public-health`, `epidemiology`, `climate-data`, `infectious-disease`, `python`, `vector-biology`, `disease-modeling`
 
 ---
 
 ## Repository URL
 
 ```
-https://github.com/Infinitysouls/epidemiological-climate-toolkit
+https://github.com/Infinitysouls/climate-epidemiology-modeling
 ```
 
 ---
@@ -78,7 +78,7 @@ https://github.com/Infinitysouls/epidemiological-climate-toolkit
 ## Files Structure
 
 ```
-epidemiological-climate-toolkit/
+climate-epidemiology-modeling/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
@@ -88,7 +88,8 @@ epidemiological-climate-toolkit/
 │   ├── INSTALLATION.md
 │   ├── USAGE.md
 │   ├── API_REFERENCE.md
-│   └── ETHICS_GUIDELINES.md
+│   ├── ETHICS_GUIDELINES.md
+│   └── OUTPUT_VARIABLES.md
 └── scripts/
     ├── fetch_climate.py
     └── fetch_climate.bat
