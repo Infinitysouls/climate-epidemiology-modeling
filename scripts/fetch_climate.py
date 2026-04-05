@@ -4,20 +4,20 @@ import time
 import os
 from datetime import datetime, timedelta
 
-NASA_POWER_API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
+CLIMATE_API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
 PARAMETERS = ["T2M", "PRECTOTCORR", "RH2M", "WS2M"]
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 INPUT_CSV = os.environ.get(
-    "IDSP_INPUT_CSV", os.path.join(SCRIPT_DIR, "..", "malaria_master_export.csv")
+    "CET_INPUT_CSV", os.path.join(SCRIPT_DIR, "..", "surveillance_data.csv")
 )
 OUTPUT_CSV = os.environ.get(
-    "IDSP_OUTPUT_CSV", os.path.join(SCRIPT_DIR, "..", "climate_data.csv")
+    "CET_OUTPUT_CSV", os.path.join(SCRIPT_DIR, "..", "climate_data.csv")
 )
 
 
 def fetch_and_parse(lat, lon, start_date_str, end_date_str):
-    """Fetch and parse NASA Power API response"""
+    """Fetch and parse climate API response"""
     start_fmt = start_date_str.replace("-", "")
     end_fmt = end_date_str.replace("-", "")
 
@@ -31,7 +31,7 @@ def fetch_and_parse(lat, lon, start_date_str, end_date_str):
         "format": "JSON",
     }
 
-    response = requests.get(NASA_POWER_API_URL, params=params, timeout=30)
+    response = requests.get(CLIMATE_API_URL, params=params, timeout=30)
 
     if response.status_code != 200:
         return None, f"HTTP {response.status_code}"
@@ -89,39 +89,39 @@ def fetch_and_parse(lat, lon, start_date_str, end_date_str):
 
 
 def main():
-    print(f"Loading outbreak data from: {INPUT_CSV}")
-    outbreaks = []
+    print(f"Loading surveillance data from: {INPUT_CSV}")
+    events = []
     with open(INPUT_CSV, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            outbreaks.append(row)
+            events.append(row)
 
-    print(f"Loaded {len(outbreaks)} outbreak records")
+    print(f"Loaded {len(events)} records")
     print()
 
     results = []
     success_count = 0
 
-    for idx, row in enumerate(outbreaks):
-        date_str = row["[Date of Outbreak]"]
+    for idx, row in enumerate(events):
+        date_str = row["[Date of Event]"]
         lat = row["[Latitude]"]
         lon = row["[Longitude]"]
         state = row["[State]"]
         district = row["[District_Clean]"].replace("/", "_")
 
-        outbreak_date = datetime.strptime(date_str[:10], "%Y-%m-%d")
-        start_date = (outbreak_date - timedelta(days=30)).strftime("%Y-%m-%d")
-        end_date = outbreak_date.strftime("%Y-%m-%d")
+        event_date = datetime.strptime(date_str[:10], "%Y-%m-%d")
+        start_date = (event_date - timedelta(days=30)).strftime("%Y-%m-%d")
+        end_date = event_date.strftime("%Y-%m-%d")
 
         print(
-            f"Processing {idx + 1}/{len(outbreaks)}: {district}, {state} ({date_str[:10]})"
+            f"Processing {idx + 1}/{len(events)}: {district}, {state} ({date_str[:10]})"
         )
 
         climate_data, error = fetch_and_parse(lat, lon, start_date, end_date)
 
         if climate_data:
             result = {
-                "Date of Outbreak": date_str[:10],
+                "Date of Event": date_str[:10],
                 "Latitude": lat,
                 "Longitude": lon,
                 "State": state,
@@ -139,7 +139,7 @@ def main():
             print(f"  ERROR: {error}")
             results.append(
                 {
-                    "Date of Outbreak": date_str[:10],
+                    "Date of Event": date_str[:10],
                     "Latitude": lat,
                     "Longitude": lon,
                     "State": state,
@@ -160,7 +160,7 @@ def main():
     print()
     print("=== COMPLETE ===")
     print(f"Output saved to: {OUTPUT_CSV}")
-    print(f"Records with data: {success_count}/{len(outbreaks)}")
+    print(f"Records with data: {success_count}/{len(events)}")
 
 
 if __name__ == "__main__":

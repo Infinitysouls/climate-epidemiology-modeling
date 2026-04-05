@@ -8,8 +8,8 @@
 ## Step 1: Clone or Download the Repository
 
 ```bash
-git clone https://github.com/Infinitysouls/climate-disease-surveillance.git
-cd climate-disease-surveillance
+git clone https://github.com/Infinitysouls/epidemiological-climate-toolkit.git
+cd epidemiological-climate-toolkit
 ```
 
 Or download and extract the ZIP file from GitHub.
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ```
 
 This installs the following packages:
-- `requests` - For making HTTP requests to NASA POWER API
+- `requests` - For making HTTP requests to climate API
 
 ## Step 4: Verify Installation
 
@@ -55,11 +55,11 @@ pip install pandas numpy matplotlib scipy
 
 ## Data File Setup
 
-Create or obtain a CSV file with outbreak data containing:
+Create or obtain a CSV file with health event data containing:
 
 | Column | Required | Description |
 |--------|----------|-------------|
-| `[Date of Outbreak]` | Yes | Date in YYYY-MM-DD format |
+| `[Date of Event]` | Yes | Date in YYYY-MM-DD format |
 | `[Latitude]` | Yes | Decimal degrees |
 | `[Longitude]` | Yes | Decimal degrees |
 | `[State]` | Yes | State name |
@@ -71,14 +71,14 @@ Set environment variables to customize file paths:
 
 ```bash
 # Linux/macOS
-export IDSP_INPUT_CSV=your_outbreak_data.csv
-export IDSP_OUTPUT_CSV=climate_results.csv
+export CET_INPUT_CSV=your_data.csv
+export CET_OUTPUT_CSV=climate_results.csv
 ```
 
 ```cmd
 # Windows
-set IDSP_INPUT_CSV=your_outbreak_data.csv
-set IDSP_OUTPUT_CSV=climate_results.csv
+set CET_INPUT_CSV=your_data.csv
+set CET_OUTPUT_CSV=climate_results.csv
 ```
 
 ## Troubleshooting
@@ -94,7 +94,7 @@ pip install -r requirements.txt
 ### API Errors
 
 - Check your internet connection
-- NASA POWER API may be temporarily unavailable - wait and retry
+- Climate API may be temporarily unavailable - wait and retry
 - Verify your input CSV has valid coordinates
 
 ### Slow Performance

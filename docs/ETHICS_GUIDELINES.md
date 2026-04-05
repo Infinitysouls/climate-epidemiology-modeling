@@ -2,21 +2,21 @@
 
 ## Purpose
 
-This toolkit is designed for legitimate public health research and disease surveillance activities. Users must adhere to ethical guidelines when using this software and any resulting data.
+This toolkit is designed for legitimate public health research and epidemiological studies. Users must adhere to ethical guidelines when using this software and any resulting data.
 
 ## Core Principles
 
-### 1. Public Health Benefit
+### 1. Research Integrity
 
 Use this toolkit only for activities that contribute to:
-- Disease surveillance and early warning
 - Epidemiological research
+- Health surveillance and early warning
 - Public health planning and response
 - Academic research and education
 
 ### 2. Data Privacy
 
-When working with outbreak data:
+When working with health data:
 
 - **Aggregate Data Only**: Work with location-level data, not individual case information
 - **Minimum Population**: Report findings only for populations of 5+ individuals
@@ -27,8 +27,8 @@ When working with outbreak data:
 
 Always attribute data sources:
 
-- **NASA POWER**: Cite the NASA LaRC POWER project in publications
-- **Surveillance Data**: Acknowledge the source of outbreak data (e.g., IDSP)
+- **Climate Data**: Cite the satellite-based climate data source in publications
+- **Health Data**: Acknowledge the source of surveillance data
 
 ### 4. Responsible Reporting
 
@@ -46,7 +46,7 @@ When publishing findings:
 | Data Type | Recommended Handling |
 |-----------|---------------------|
 | Location coordinates | Aggregate to district level when possible |
-| Outbreak dates | Use for temporal analysis, not individual tracking |
+| Event dates | Use for temporal analysis, not individual tracking |
 | Case counts | Aggregate, never report single-case data |
 | Population data | Use official census or estimate sources |
 
@@ -63,7 +63,6 @@ Users are responsible for:
 1. **Local Laws**: Comply with data protection regulations in their jurisdiction
    - GDPR (European Union)
    - HIPAA (United States)
-   - DPDP Act (India)
    - Other applicable laws
 
 2. **Data Sharing Agreements**: Honor any terms under which data was obtained
@@ -76,7 +75,6 @@ This toolkit must NOT be used for:
 
 - Targeting specific individuals or households
 - Insurance or employment decisions
-- Immigration enforcement
 - Any form of surveillance beyond public health purposes
 - Activities that could harm public health efforts
 
@@ -99,22 +97,14 @@ If you identify ethical concerns or misuse:
 When using this toolkit in research, cite:
 
 ```
-Climate Disease Surveillance Toolkit
-https://github.com/Infinitysouls/climate-disease-surveillance
-```
-
-When using NASA POWER data:
-
-```
-Stackhouse, P.W., et al. (2022). NASA LaRC POWER Project.
-NASA Langley Atmospheric Science Data Center DAAC.
-https://power.larc.nasa.gov/
+Epidemiological Climate Toolkit
+https://github.com/Infinitysouls/epidemiological-climate-toolkit
 ```
 
 ## Acknowledgments
 
 This toolkit was developed for public health research purposes and draws on:
-- Open climate data from NASA
+- Open climate data from satellite sources
 - Public health surveillance infrastructure
 - Open source software principles
 

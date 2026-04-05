@@ -15,30 +15,30 @@ python scripts/fetch_climate.py
 ```
 
 The script will:
-1. Load your outbreak data from the configured input file
-2. Fetch 30-day climate data for each outbreak location
+1. Load your surveillance data from the configured input file
+2. Fetch 30-day climate data for each location
 3. Calculate summary statistics
 4. Save results to the output CSV file
 
 ## Input File Requirements
 
-Your outbreak data CSV must contain these columns:
+Your surveillance data CSV must contain these columns:
 
 | Column Name | Example | Description |
 |-------------|---------|-------------|
-| `[Date of Outbreak]` | 2017-05-15 | Date in YYYY-MM-DD format |
+| `[Date of Event]` | 2017-05-15 | Date in YYYY-MM-DD format |
 | `[Latitude]` | 23.456 | Latitude in decimal degrees |
 | `[Longitude]` | 77.890 | Longitude in decimal degrees |
-| `[State]` | Rajasthan | State name |
-| `[District_Clean]` | Jaipur | District name |
+| `[State]` | State Name | State name |
+| `[District_Clean]` | District Name | District name |
 
 ### Example CSV Structure
 
 ```csv
-[Date of Outbreak],[Latitude],[Longitude],[State],[District_Clean]
-2017-05-15,23.456,77.890,Rajasthan,Jaipur
-2017-06-20,25.317,82.456,Uttar Pradesh,Varanasi
-2017-07-10,19.876,75.456,Maharashtra,Pune
+[Date of Event],[Latitude],[Longitude],[State],[District_Clean]
+2017-05-15,23.456,77.890,StateName,DistrictName
+2017-06-20,25.317,82.456,StateName,DistrictName
+2017-07-10,19.876,75.456,StateName,DistrictName
 ```
 
 ## Configuration
@@ -47,22 +47,22 @@ Your outbreak data CSV must contain these columns:
 
 **Windows:**
 ```cmd
-set IDSP_INPUT_CSV=malaria_outbreaks.csv
-set IDSP_OUTPUT_CSV=climate_data.csv
+set CET_INPUT_CSV=my_data.csv
+set CET_OUTPUT_CSV=climate_results.csv
 python scripts/fetch_climate.py
 ```
 
 **Linux/macOS:**
 ```bash
-export IDSP_INPUT_CSV=malaria_outbreaks.csv
-export IDSP_OUTPUT_CSV=climate_data.csv
+export CET_INPUT_CSV=my_data.csv
+export CET_OUTPUT_CSV=climate_results.csv
 python scripts/fetch_climate.py
 ```
 
 ### Default Values
 
 If environment variables are not set, defaults are used:
-- Input: `malaria_master_export.csv` (in project root)
+- Input: `surveillance_data.csv` (in project root)
 - Output: `climate_data.csv` (in project root)
 
 ## Understanding Output
@@ -71,7 +71,7 @@ The script generates a CSV with the following columns:
 
 | Column | Description | Unit |
 |--------|-------------|------|
-| `Date of Outbreak` | Original outbreak date | - |
+| `Date of Event` | Original event date | - |
 | `Latitude` | Location latitude | degrees |
 | `Longitude` | Location longitude | degrees |
 | `State` | State name | - |
@@ -89,7 +89,7 @@ The script generates a CSV with the following columns:
 
 ## Climate Window
 
-By default, the script fetches climate data for the 30 days prior to each outbreak date. This window can be adjusted by modifying the `fetch_and_parse()` function call in the script.
+By default, the script fetches climate data for the 30 days prior to each event date. This window can be adjusted by modifying the script.
 
 ## Progress and Logging
 
@@ -128,9 +128,8 @@ The output CSV can be used with:
 ### Empty or missing data
 - Check coordinates are valid (lat: -90 to 90, lon: -180 to 180)
 - Verify date format is correct
-- Check NASA POWER API status
+- Check climate API status
 
 ### Rate limiting
 - Reduce the sleep delay (not recommended)
 - Process data in batches
-- Use multiple API keys (enterprise users)

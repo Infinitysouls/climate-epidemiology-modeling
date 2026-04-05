@@ -1,19 +1,19 @@
-# Climate Disease Surveillance Toolkit
+# Epidemiological Climate Toolkit
 
-A Python toolkit for analyzing climate data in public health disease surveillance. Fetches meteorological data from NASA's POWER API and combines it with outbreak data for epidemiological analysis.
+A Python toolkit for analyzing climate data in epidemiological research. Fetches meteorological data from satellite-based climate APIs and combines it with health event data for research analysis.
 
 ## Overview
 
-This toolkit enables public health professionals to:
+This toolkit enables researchers and public health professionals to:
 
 - Fetch climate data (temperature, precipitation, humidity, wind speed) for any geographic location
-- Correlate climate factors with disease outbreak patterns
-- Support evidence-based surveillance and response planning
+- Correlate climate factors with health event patterns
+- Support evidence-based epidemiological research
 
 ## Features
 
-- **NASA POWER API Integration**: Access 30+ years of climate data globally
-- **Automated Data Fetching**: Batch process multiple outbreak locations
+- **Satellite Climate Data Integration**: Access 30+ years of climate data globally
+- **Automated Data Fetching**: Batch process multiple locations
 - **Climate Metrics**: Temperature, precipitation, humidity, and wind speed analysis
 - **Portable Design**: Works on Windows, Linux, and macOS
 
@@ -43,7 +43,7 @@ Prepare a CSV file with the following columns:
 
 | Column | Description |
 |--------|-------------|
-| `[Date of Outbreak]` | Date in YYYY-MM-DD format |
+| `[Date of Event]` | Date in YYYY-MM-DD format |
 | `[Latitude]` | Decimal degrees (e.g., 23.45) |
 | `[Longitude]` | Decimal degrees (e.g., 77.56) |
 | `[State]` | State name |
@@ -51,15 +51,15 @@ Prepare a CSV file with the following columns:
 
 Set the input file path:
 ```bash
-export IDSP_INPUT_CSV=your_outbreak_data.csv
-export IDSP_OUTPUT_CSV=climate_results.csv
+export CET_INPUT_CSV=your_data.csv
+export CET_OUTPUT_CSV=climate_results.csv
 python scripts/fetch_climate.py
 ```
 
 **Windows:**
 ```cmd
-set IDSP_INPUT_CSV=your_outbreak_data.csv
-set IDSP_OUTPUT_CSV=climate_results.csv
+set CET_INPUT_CSV=your_data.csv
+set CET_OUTPUT_CSV=climate_results.csv
 python scripts/fetch_climate.py
 ```
 
@@ -69,7 +69,7 @@ The script generates a CSV file with climate data:
 
 | Column | Description |
 |--------|-------------|
-| `Date of Outbreak` | Original outbreak date |
+| `Date of Event` | Original event date |
 | `Latitude`, `Longitude` | Location |
 | `State`, `District` | Administrative divisions |
 | `Climate_Start`, `Climate_End` | Data retrieval window |
@@ -94,19 +94,19 @@ See [docs/API_REFERENCE.md](docs/API_REFERENCE.md) for detailed API documentatio
 
 This toolkit is designed for:
 
-- **Epidemiological Research**: Study climate-disease relationships
-- **Disease Surveillance**: Support early warning systems
+- **Epidemiological Research**: Study climate-health relationships
+- **Health Surveillance**: Support early warning systems
 - **Public Health Planning**: Inform prevention strategies
 - **Academic Research**: Source data for publications
 
 ## Data Sources
 
-- **Climate Data**: [NASA POWER API](https://power.larc.nasa.gov/) (Public Domain)
-- **Outbreak Data**: Integrated Disease Surveillance Programme (IDSP), India
+- **Climate Data**: Satellite-based climate API (Public Domain)
+- **Health Data**: User-provided surveillance data
 
 ## Ethical Statement
 
-This toolkit is designed for legitimate public health research and surveillance purposes. Users must:
+This toolkit is designed for legitimate public health research purposes. Users must:
 
 - Comply with applicable data protection regulations
 - Attribute data sources appropriately
@@ -127,11 +127,11 @@ See [docs/ETHICS_GUIDELINES.md](docs/ETHICS_GUIDELINES.md) for full guidelines.
 If you use this toolkit in your research, please cite:
 
 ```bibtex
-@software{climate_disease_surveillance,
-  title = {Climate Disease Surveillance Toolkit},
-  author = {Public Health Research Community},
+@software{epidemiological_climate_toolkit,
+  title = {Epidemiological Climate Toolkit},
+  author = {Research Community},
   year = {2024},
-  url = {https://github.com/Infinitysouls/climate-disease-surveillance}
+  url = {https://github.com/Infinitysouls/epidemiological-climate-toolkit}
 }
 ```
 
@@ -151,4 +151,4 @@ For questions or issues, please open an issue on GitHub.
 
 ---
 
-*This toolkit is intended for public health professionals and researchers.*
+*This toolkit is intended for researchers and public health professionals.*

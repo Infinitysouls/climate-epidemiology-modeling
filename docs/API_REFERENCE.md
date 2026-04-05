@@ -1,8 +1,8 @@
-# NASA POWER API Reference
+# Climate API Reference
 
 ## Overview
 
-This toolkit uses the [NASA Langley Research Center (LaRC) POWER Project](https://power.larc.nasa.gov/) API to retrieve climate data. NASA POWER provides over 30 years of satellite-based meteorology data globally.
+This toolkit uses a satellite-based climate data API to retrieve meteorological data. The API provides over 30 years of climate data globally.
 
 ## API Endpoint
 
@@ -13,7 +13,7 @@ https://power.larc.nasa.gov/api/temporal/daily/point
 ## Base URL
 
 ```python
-NASA_POWER_API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
+CLIMATE_API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
 ```
 
 ## Request Parameters
@@ -129,15 +129,11 @@ data = response.json()
 
 ## Citation
 
-When using NASA POWER data, please cite:
-
-> Stackhouse, P.W., Maxwell, S., DiGirolamo, L., Haines, D., Booth, M., Cox, S., Tucker, C., Hoell, A., Blunschi, T., Anderson, J., Semeraro, J., Gokhan, B., and Zhang, J.: NASA LaRC POWER Project - Updated to v8.0.12, NASA Langley Atmospheric Science Data Center DAAC, accessed May 2024, https://power.larc.nasa.gov/, 2022.
+When using this climate data, please cite the data provider appropriately.
 
 ## Additional Resources
 
-- [NASA POWER Website](https://power.larc.nasa.gov/)
-- [API Documentation](https://power.larc.nasa.gov/api/pages/en/)
-- [Data Availability](https://power.larc.nasa.gov/api/pages/en/!#!/)
+- API Documentation: https://power.larc.nasa.gov/
 
 ## Troubleshooting
 
