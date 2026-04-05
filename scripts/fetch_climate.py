@@ -1,3 +1,4 @@
+import argparse
 import requests
 import csv
 import time
@@ -8,12 +9,8 @@ CLIMATE_API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
 PARAMETERS = ["T2M", "PRECTOTCORR", "RH2M", "WS2M"]
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV = os.environ.get(
-    "CET_INPUT_CSV", os.path.join(SCRIPT_DIR, "..", "surveillance_data.csv")
-)
-OUTPUT_CSV = os.environ.get(
-    "CET_OUTPUT_CSV", os.path.join(SCRIPT_DIR, "..", "climate_data.csv")
-)
+DEFAULT_INPUT = os.path.join(SCRIPT_DIR, "..", "data.csv")
+DEFAULT_OUTPUT = os.path.join(SCRIPT_DIR, "..", "climate_output.csv")
 
 
 def fetch_and_parse(lat, lon, start_date_str, end_date_str):
@@ -89,32 +86,53 @@ def fetch_and_parse(lat, lon, start_date_str, end_date_str):
 
 
 def main():
-    print(f"Loading surveillance data from: {INPUT_CSV}")
-    events = []
-    with open(INPUT_CSV, "r", encoding="utf-8") as f:
+    parser = argparse.ArgumentParser(
+        description="Fetch climate data for health event locations"
+    )
+    parser.add_argument(
+        "-i",
+        "--input",
+        default=os.environ.get("CLIMATE_INPUT", DEFAULT_INPUT),
+        help="Input CSV file with location data",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default=os.environ.get("CLIMATE_OUTPUT", DEFAULT_OUTPUT),
+        help="Output CSV file for results",
+    )
+    args = parser.parse_args()
+
+    input_csv = args.input
+    output_csv = args.output
+
+    print(f"Loading data from: {input_csv}")
+
+    records = []
+    with open(input_csv, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            events.append(row)
+            records.append(row)
 
-    print(f"Loaded {len(events)} records")
+    print(f"Loaded {len(records)} records")
     print()
 
     results = []
     success_count = 0
 
-    for idx, row in enumerate(events):
+    for idx, row in enumerate(records):
         date_str = row["[Date of Event]"]
         lat = row["[Latitude]"]
         lon = row["[Longitude]"]
-        state = row["[State]"]
-        district = row["[District_Clean]"].replace("/", "_")
+        region1 = row["[Region1]"]
+        region2 = row["[Region2]"]
 
         event_date = datetime.strptime(date_str[:10], "%Y-%m-%d")
         start_date = (event_date - timedelta(days=30)).strftime("%Y-%m-%d")
         end_date = event_date.strftime("%Y-%m-%d")
 
         print(
-            f"Processing {idx + 1}/{len(events)}: {district}, {state} ({date_str[:10]})"
+            f"Processing {idx + 1}/{len(records)}: {region2}, {region1} ({date_str[:10]})"
         )
 
         climate_data, error = fetch_and_parse(lat, lon, start_date, end_date)
@@ -124,8 +142,8 @@ def main():
                 "Date of Event": date_str[:10],
                 "Latitude": lat,
                 "Longitude": lon,
-                "State": state,
-                "District": district,
+                "Region1": region1,
+                "Region2": region2,
                 "Climate_Start": start_date,
                 "Climate_End": end_date,
             }
@@ -142,8 +160,8 @@ def main():
                     "Date of Event": date_str[:10],
                     "Latitude": lat,
                     "Longitude": lon,
-                    "State": state,
-                    "District": district,
+                    "Region1": region1,
+                    "Region2": region2,
                     "Climate_Start": start_date,
                     "Climate_End": end_date,
                     "Error": error,
@@ -152,15 +170,15 @@ def main():
 
         time.sleep(0.3)
 
-    with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
+    with open(output_csv, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=results[0].keys())
         writer.writeheader()
         writer.writerows(results)
 
     print()
     print("=== COMPLETE ===")
-    print(f"Output saved to: {OUTPUT_CSV}")
-    print(f"Records with data: {success_count}/{len(events)}")
+    print(f"Output saved to: {output_csv}")
+    print(f"Records with data: {success_count}/{len(records)}")
 
 
 if __name__ == "__main__":

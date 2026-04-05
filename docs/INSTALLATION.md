@@ -43,7 +43,11 @@ This installs the following packages:
 python scripts/fetch_climate.py --help
 ```
 
-You should see the script run and prompt for input data.
+You should see:
+
+```
+usage: fetch_climate.py [-h] [-i INPUT] [-o OUTPUT]
+```
 
 ## Optional: Additional Dependencies
 
@@ -62,8 +66,18 @@ Create or obtain a CSV file with health event data containing:
 | `[Date of Event]` | Yes | Date in YYYY-MM-DD format |
 | `[Latitude]` | Yes | Decimal degrees |
 | `[Longitude]` | Yes | Decimal degrees |
-| `[State]` | Yes | State name |
-| `[District_Clean]` | Yes | District name |
+| `[Region1]` | Yes | Primary region (State/Province) |
+| `[Region2]` | Yes | Secondary region (District/County) |
+
+### Example Input File
+
+Save as `data.csv`:
+
+```csv
+[Date of Event],[Latitude],[Longitude],[Region1],[Region2]
+2017-05-15,23.456,77.890,StateName,DistrictName
+2017-06-20,25.317,82.456,StateName,DistrictName
+```
 
 ## Configuration (Optional)
 
@@ -71,14 +85,20 @@ Set environment variables to customize file paths:
 
 ```bash
 # Linux/macOS
-export CET_INPUT_CSV=your_data.csv
-export CET_OUTPUT_CSV=climate_results.csv
+export CLIMATE_INPUT=your_data.csv
+export CLIMATE_OUTPUT=climate_results.csv
 ```
 
 ```cmd
 # Windows
-set CET_INPUT_CSV=your_data.csv
-set CET_OUTPUT_CSV=climate_results.csv
+set CLIMATE_INPUT=your_data.csv
+set CLIMATE_OUTPUT=climate_results.csv
+```
+
+Or use command line arguments:
+
+```bash
+python scripts/fetch_climate.py -i input.csv -o output.csv
 ```
 
 ## Troubleshooting

@@ -20,7 +20,7 @@ When working with health data:
 
 - **Aggregate Data Only**: Work with location-level data, not individual case information
 - **Minimum Population**: Report findings only for populations of 5+ individuals
-- **Geographic Generalization**: Consider reporting at district/state level rather than exact coordinates
+- **Geographic Generalization**: Consider reporting at regional level rather than exact coordinates
 - **De-identification**: Remove any personally identifiable information before analysis
 
 ### 3. Data Attribution
@@ -45,7 +45,7 @@ When publishing findings:
 
 | Data Type | Recommended Handling |
 |-----------|---------------------|
-| Location coordinates | Aggregate to district level when possible |
+| Location coordinates | Aggregate to regional level when possible |
 | Event dates | Use for temporal analysis, not individual tracking |
 | Case counts | Aggregate, never report single-case data |
 | Population data | Use official census or estimate sources |

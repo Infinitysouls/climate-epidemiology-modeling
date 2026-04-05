@@ -20,6 +20,32 @@ The script will:
 3. Calculate summary statistics
 4. Save results to the output CSV file
 
+## Command Line Arguments
+
+```bash
+python scripts/fetch_climate.py -i input.csv -o output.csv
+```
+
+| Argument | Short | Description | Default |
+|----------|-------|-------------|---------|
+| `--input` | `-i` | Input CSV file | `data.csv` |
+| `--output` | `-o` | Output CSV file | `climate_output.csv` |
+
+### Examples
+
+```bash
+# Using short flags
+python scripts/fetch_climate.py -i mydata.csv -o results.csv
+
+# Using long flags
+python scripts/fetch_climate.py --input events.csv --output climate.csv
+
+# Using environment variables
+export CLIMATE_INPUT=mydata.csv
+export CLIMATE_OUTPUT=results.csv
+python scripts/fetch_climate.py
+```
+
 ## Input File Requirements
 
 Your surveillance data CSV must contain these columns:
@@ -29,13 +55,13 @@ Your surveillance data CSV must contain these columns:
 | `[Date of Event]` | 2017-05-15 | Date in YYYY-MM-DD format |
 | `[Latitude]` | 23.456 | Latitude in decimal degrees |
 | `[Longitude]` | 77.890 | Longitude in decimal degrees |
-| `[State]` | State Name | State name |
-| `[District_Clean]` | District Name | District name |
+| `[Region1]` | StateName | Primary administrative region |
+| `[Region2]` | DistrictName | Secondary administrative region |
 
 ### Example CSV Structure
 
 ```csv
-[Date of Event],[Latitude],[Longitude],[State],[District_Clean]
+[Date of Event],[Latitude],[Longitude],[Region1],[Region2]
 2017-05-15,23.456,77.890,StateName,DistrictName
 2017-06-20,25.317,82.456,StateName,DistrictName
 2017-07-10,19.876,75.456,StateName,DistrictName
@@ -43,27 +69,27 @@ Your surveillance data CSV must contain these columns:
 
 ## Configuration
 
-### Using Environment Variables
+### Environment Variables
 
 **Windows:**
 ```cmd
-set CET_INPUT_CSV=my_data.csv
-set CET_OUTPUT_CSV=climate_results.csv
+set CLIMATE_INPUT=my_data.csv
+set CLIMATE_OUTPUT=climate_results.csv
 python scripts/fetch_climate.py
 ```
 
 **Linux/macOS:**
 ```bash
-export CET_INPUT_CSV=my_data.csv
-export CET_OUTPUT_CSV=climate_results.csv
+export CLIMATE_INPUT=my_data.csv
+export CLIMATE_OUTPUT=climate_results.csv
 python scripts/fetch_climate.py
 ```
 
-### Default Values
+### Priority Order
 
-If environment variables are not set, defaults are used:
-- Input: `surveillance_data.csv` (in project root)
-- Output: `climate_data.csv` (in project root)
+1. Command line arguments (`-i`, `--input`)
+2. Environment variables (`CLIMATE_INPUT`, `CLIMATE_OUTPUT`)
+3. Default values (`data.csv`, `climate_output.csv`)
 
 ## Understanding Output
 
@@ -74,8 +100,8 @@ The script generates a CSV with the following columns:
 | `Date of Event` | Original event date | - |
 | `Latitude` | Location latitude | degrees |
 | `Longitude` | Location longitude | degrees |
-| `State` | State name | - |
-| `District` | District name | - |
+| `Region1` | Primary region | - |
+| `Region2` | Secondary region | - |
 | `Climate_Start` | Start of 30-day window | YYYY-MM-DD |
 | `Climate_End` | End of 30-day window | YYYY-MM-DD |
 | `Temp_Mean` | Mean temperature | °C |

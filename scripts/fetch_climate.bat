@@ -11,17 +11,17 @@ echo from satellite-based climate API.
 echo.
 
 REM Set default paths (customize as needed)
-set CET_INPUT_CSV=surveillance_data.csv
-set CET_OUTPUT_CSV=climate_data.csv
+set CLIMATE_INPUT=data.csv
+set CLIMATE_OUTPUT=climate_output.csv
 
-echo Input file: %CET_INPUT_CSV%
-echo Output file: %CET_OUTPUT_CSV%
+echo Input file: %CLIMATE_INPUT%
+echo Output file: %CLIMATE_OUTPUT%
 echo.
 echo Starting climate data fetch...
 echo This may take 30-60 minutes for large datasets.
 echo.
 
-python scripts\fetch_climate.py
+python scripts\fetch_climate.py -i %CLIMATE_INPUT% -o %CLIMATE_OUTPUT%
 
 echo.
 echo Done! Press any key to exit.

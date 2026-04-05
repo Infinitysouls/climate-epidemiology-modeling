@@ -37,6 +37,19 @@ fetch_climate.bat
 python scripts/fetch_climate.py
 ```
 
+### Command Line Arguments
+
+```bash
+python scripts/fetch_climate.py -i input.csv -o output.csv
+```
+
+**Environment Variables:**
+```bash
+export CLIMATE_INPUT=your_data.csv
+export CLIMATE_OUTPUT=climate_results.csv
+python scripts/fetch_climate.py
+```
+
 ### Input Format
 
 Prepare a CSV file with the following columns:
@@ -46,21 +59,16 @@ Prepare a CSV file with the following columns:
 | `[Date of Event]` | Date in YYYY-MM-DD format |
 | `[Latitude]` | Decimal degrees (e.g., 23.45) |
 | `[Longitude]` | Decimal degrees (e.g., 77.56) |
-| `[State]` | State name |
-| `[District_Clean]` | District name |
+| `[Region1]` | Primary region (e.g., State/Province) |
+| `[Region2]` | Secondary region (e.g., District/County) |
 
-Set the input file path:
-```bash
-export CET_INPUT_CSV=your_data.csv
-export CET_OUTPUT_CSV=climate_results.csv
-python scripts/fetch_climate.py
-```
+### Example CSV Structure
 
-**Windows:**
-```cmd
-set CET_INPUT_CSV=your_data.csv
-set CET_OUTPUT_CSV=climate_results.csv
-python scripts/fetch_climate.py
+```csv
+[Date of Event],[Latitude],[Longitude],[Region1],[Region2]
+2017-05-15,23.456,77.890,StateName,DistrictName
+2017-06-20,25.317,82.456,StateName,DistrictName
+2017-07-10,19.876,75.456,StateName,DistrictName
 ```
 
 ## Output
@@ -71,7 +79,7 @@ The script generates a CSV file with climate data:
 |--------|-------------|
 | `Date of Event` | Original event date |
 | `Latitude`, `Longitude` | Location |
-| `State`, `District` | Administrative divisions |
+| `Region1`, `Region2` | Administrative divisions |
 | `Climate_Start`, `Climate_End` | Data retrieval window |
 | `Temp_Mean`, `Temp_Min`, `Temp_Max` | Temperature statistics (°C) |
 | `Precip_Total` | Total precipitation (mm) |
