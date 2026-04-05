@@ -145,7 +145,7 @@ If you use this toolkit in your research, please cite:
 @software{climate_epidemiology_modeling_2026,
   title = {Climate Epidemiology Modeling Toolkit},
   version = {2.0},
-  author = {Research Community},
+  author = {Dr. Avinash M.},
   year = {2026},
   month = {April},
   url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},
@@ -155,20 +155,20 @@ If you use this toolkit in your research, please cite:
 
 ### APA 7th Edition
 ```
-Research Community. (2026). Climate Epidemiology Modeling Toolkit (Version 2.0) 
+Dr. Avinash M.. (2026). Climate Epidemiology Modeling Toolkit (Version 2.0) 
 [Computer software]. GitHub. https://github.com/Infinitysouls/climate-epidemiology-modeling
 ```
 
 ### IEEE
 ```
-"Climate Epidemiology Modeling Toolkit," Research Community, Version 2.0, Jan. 2026. 
+"Climate Epidemiology Modeling Toolkit," Dr. Avinash M., Version 2.0, Jan. 2026. 
 [Online]. Available: https://github.com/Infinitysouls/climate-epidemiology-modeling
 ```
 
 ### Harvard
 ```
 @online{climate2026,
-  author = {Research Community},
+  author = {Dr. Avinash M.},
   title = {Climate Epidemiology Modeling Toolkit},
   year = {2026},
   url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},

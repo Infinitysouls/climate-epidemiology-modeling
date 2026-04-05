@@ -4,7 +4,7 @@ type: software
 title: "Climate Epidemiology Modeling Toolkit"
 abstract: "Python toolkit for climate data analysis in infectious disease epidemiology modeling. Computes 122 climate and epidemiological variables including EIP, vector capacity, and transmission risk metrics."
 authors:
-  - name: "Research Community"
+  - name: "Dr. Avinash M."
 version: "2.0.0"
 date-released: "2026-04-05"
 repository-code: "https://github.com/Infinitysouls/climate-epidemiology-modeling"
