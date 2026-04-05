@@ -1,0 +1,36 @@
+# Data files (user must provide their own)
+*.csv
+*.xlsx
+*.xls
+
+# Output files
+climate_output/
+*.geojson
+*.pbix
+
+# Cache and temporary files
+__pycache__/
+*.pyc
+*.pyo
+.ruff_cache/
+.pytest_cache/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+
+# Export scripts
+export_*.ps1
+export_*.bat

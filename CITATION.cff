@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this toolkit in your research, please cite it as follows."
+type: software
+title: "Climate Disease Surveillance Toolkit"
+abstract: "Python toolkit for analyzing climate data in public health disease surveillance using NASA POWER API."
+authors:
+  - name: "Public Health Research Community"
+version: "1.0.0"
+date-released: "2024-01-01"
+repository-code: "https://github.com/Infinitysouls/climate-disease-surveillance"
+url: "https://github.com/Infinitysouls/climate-disease-surveillance"
+license: MIT
+keywords:
+  - public-health
+  - epidemiology
+  - climate-data
+  - disease-surveillance
+  - nasa-power
+  - python
+  - malaria
+  - outbreak-analysis
+commit: "initial"
+version-control:
+  type: git
+  url: "https://github.com/Infinitysouls/climate-disease-surveillance"
