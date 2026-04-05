@@ -1,121 +1,287 @@
 # Climate Epidemiology Modeling Toolkit
 
-A Python toolkit for climate data analysis in infectious disease epidemiology modeling. Fetches meteorological data from satellite-based climate APIs and computes comprehensive metrics for epidemiological research.
+A Python toolkit for climate data analysis in infectious disease epidemiology research. Fetches satellite-based meteorological data and computes comprehensive climate and epidemiological variables for disease transmission modeling.
+
+---
 
 ## Overview
 
-This toolkit enables researchers and public health professionals to:
+This toolkit enables researchers to:
 
-- Fetch climate data (temperature, precipitation, humidity, wind speed) for any geographic location
-- Compute 120+ climate metrics including epidemiological indices
-- Correlate climate factors with infectious disease transmission patterns
-- Support evidence-based epidemiological modeling and surveillance
+- **Fetch Climate Data**: Retrieve 30+ years of satellite-based climate data for any global location
+- **Compute Epidemiological Indices**: Calculate vector biology metrics including EIP, vector capacity, and transmission risk
+- **Analyze Climate-Disease Relationships**: Correlate environmental factors with infectious disease patterns
+- **Support Surveillance Systems**: Develop climate-informed early warning systems
+
+---
+
+## Scientific Background
+
+### Climate and Infectious Disease Dynamics
+
+Environmental factors play a critical role in infectious disease transmission, particularly for vector-borne diseases. Key relationships include:
+
+| Climate Factor | Disease Mechanism |
+|---------------|-------------------|
+| **Temperature** | Affects vector development rate, survival, and pathogen replication (Extrinsic Incubation Period) |
+| **Precipitation** | Creates breeding sites, influences vector abundance |
+| **Humidity** | Affects vector survival and biting behavior |
+| **Wind** | Influences vector dispersal and pathogen spread |
+
+### Key Epidemiological Concepts
+
+**Extrinsic Incubation Period (EIP)**: The time required for a pathogen to develop within a vector before transmission is possible. Warmer temperatures accelerate EIP, increasing transmission potential.
+
+**Vector Capacity**: A composite metric representing the potential for vector-borne disease transmission, incorporating vector density, survival rates, and biting behavior.
+
+**Climate Suitability Index**: An integrated measure of environmental conditions favorable for disease transmission.
+
+---
 
 ## Features
 
-- **Satellite Climate Data Integration**: Access 30+ years of climate data globally
-- **Comprehensive Metrics**: 120+ computed variables including vector biology indices
-- **Epidemiological Indices**: EIP, vector capacity, transmission risk estimates
-- **Portable Design**: Works on Windows, Linux, and macOS
+| Feature | Description |
+|---------|-------------|
+| **122 Computed Variables** | Comprehensive set of climate and epidemiological metrics |
+| **Satellite Data** | Global coverage from NASA POWER API (1981-present) |
+| **Vector Biology Indices** | EIP, vector capacity, survival rates |
+| **Composite Indices** | Climate suitability, transmission risk |
+| **Temporal Analysis** | Weekly lags, seasonal patterns, trends |
+| **Quality Indicators** | Data validation and completeness flags |
+
+---
 
 ## Quick Start
 
 ### Installation
 
 ```bash
+git clone https://github.com/Infinitysouls/climate-epidemiology-modeling.git
+cd climate-epidemiology-modeling
 pip install -r requirements.txt
 ```
 
 ### Basic Usage
 
-**Windows:**
 ```bash
+# Windows
 fetch_climate.bat
-```
 
-**Linux/macOS:**
-```bash
-python scripts/fetch_climate.py
-```
-
-### Command Line Arguments
-
-```bash
-python scripts/fetch_climate.py -i input.csv -o output.csv
-```
-
-**Environment Variables:**
-```bash
-export CLIMATE_INPUT=your_data.csv
-export CLIMATE_OUTPUT=climate_results.csv
-python scripts/fetch_climate.py
+# Linux/macOS
+python scripts/fetch_climate.py -i your_data.csv -o climate_results.csv
 ```
 
 ### Input Format
 
-Prepare a CSV file with the following columns:
+Prepare a CSV with:
 
-| Column | Description |
-|--------|-------------|
-| `[Date of Event]` | Date in YYYY-MM-DD format |
-| `[Latitude]` | Decimal degrees (e.g., 23.45) |
-| `[Longitude]` | Decimal degrees (e.g., 77.56) |
-| `[Region1]` | Primary region (e.g., State/Province) |
-| `[Region2]` | Secondary region (e.g., District/County) |
+| Column | Description | Example |
+|--------|-------------|---------|
+| `[Date of Event]` | Event date (YYYY-MM-DD) | 2017-05-15 |
+| `[Latitude]` | Decimal degrees | 23.456 |
+| `[Longitude]` | Decimal degrees | 77.890 |
+| `[Region1]` | Primary region | Rajasthan |
+| `[Region2]` | Secondary region | Jaipur |
 
-### Example CSV Structure
+---
 
-```csv
-[Date of Event],[Latitude],[Longitude],[Region1],[Region2]
-2017-05-15,23.456,77.890,StateName,DistrictName
-2017-06-20,25.317,82.456,StateName,DistrictName
-2017-07-10,19.876,75.456,StateName,DistrictName
+## Scientific Use Cases
+
+### 1. Vector-Borne Disease Transmission Modeling
+
+**Objective**: Assess climate suitability for vector-borne disease transmission
+
+**Variables Used**:
+- `EIP_Days` - Extrinsic incubation period
+- `Vector_Capacity` - Transmission potential
+- `Larval_Survival` - Immature vector viability
+- `Adult_Survival` - Adult vector longevity
+
+**Analysis**: Identify regions where climate conditions favor sustained transmission
+
+**Example**:
+```python
+import pandas as pd
+df = pd.read_csv('climate_results.csv')
+
+# High transmission potential areas
+high_risk = df[(df['Vector_Capacity'] > 60) & (df['EIP_Category'] == 'High')]
 ```
 
-## Output Variables
+### 2. Climate-Based Early Warning Systems
 
-The script generates a CSV with **120+ computed variables**:
+**Objective**: Develop predictive models for disease outbreaks
 
-| Category | Variables | Description |
-|----------|-----------|-------------|
-| **Metadata** | 7 | Date, Location, Region |
-| **Temperature** | 20 | Mean, min, max, percentiles, weekly, thresholds |
-| **Precipitation** | 18 | Total, days, intensity, streaks, cumulative |
-| **Humidity** | 12 | Mean, min, max, percentiles, weekly |
-| **Wind** | 10 | Mean, max, variability, thresholds |
-| **Interactions** | 12 | Heat index, discomfort, correlations |
-| **Disease Indices** | 12 | EIP, vector survival, transmission risk |
-| **Composites** | 10 | Stress indices, suitability scores |
-| **Temporal** | 10 | Season, month, day of year, lags |
-| **Summary** | 3 | Data quality indicators |
+**Variables Used**:
+- `Temp_Trend` - Temperature trajectory
+- `Precip_Cumulative_14d` - Recent rainfall patterns
+- `Outbreak_Risk_30d` - 30-day risk projection
+- `Critical_Threshold` - Risk threshold exceeded
 
-See [docs/OUTPUT_VARIABLES.md](docs/OUTPUT_VARIABLES.md) for complete variable dictionary.
+**Analysis**: Correlate climate anomalies with outbreak occurrence
+
+**Example**:
+```python
+# Identify预警阈值触发的区域
+alerts = df[df['Critical_Threshold'] == 1]
+print(f"Alert regions: {len(alerts)}")
+```
+
+### 3. Seasonal Transmission Patterns
+
+**Objective**: Characterize seasonal dynamics of disease transmission
+
+**Variables Used**:
+- `Season` - Climate season classification
+- `Mosquito_Dev_Days` - Vector development days
+- `Persistence_Days` - Consecutive risk days
+- `Wet_Season_Indicator` - Seasonal rainfall
+
+**Analysis**: Compare transmission metrics across seasons
+
+**Example**:
+```python
+seasonal = df.groupby('Season').agg({
+    'Vector_Capacity': 'mean',
+    'EIP_Days': 'mean',
+    'Transmission_Risk_Proxy': 'mean'
+}).round(2)
+```
+
+### 4. Entomological Risk Assessment
+
+**Objective**: Evaluate vector population dynamics
+
+**Variables Used**:
+- `Larval_Survival` - Breeding site productivity
+- `Vector_Fecundity` - Vector reproductive capacity
+- `Gonotrophic_Cycle` - Reproductive cycle duration
+- `Blood_Feeding_Rate` - Feeding frequency
+
+**Analysis**: Estimate vector abundance potential
+
+**Example**:
+```python
+# High entomological risk areas
+entomological_risk = df[
+    (df['Larval_Survival'] > 70) & 
+    (df['Vector_Fecundity'] > 5)
+]
+```
+
+### 5. Climate Change Impact Assessment
+
+**Objective**: Project future transmission patterns under climate scenarios
+
+**Variables Used**:
+- `Temp_Mean`, `Temp_Trend` - Temperature changes
+- `Precip_Total`, `Rain_Probability` - Precipitation patterns
+- `Climate_Suitability_Index` - Integrated suitability
+- `Aridity_Index` - Dryness indicator
+
+**Analysis**: Compare current and projected conditions
+
+**Example**:
+```python
+# Expanding transmission zones
+suitable_areas = df[df['Climate_Suitability_Index'] > 50]
+```
+
+### 6. Geographic Risk Stratification
+
+**Objective**: Classify regions by transmission risk level
+
+**Variables Used**:
+- `Outbreak_Risk_30d` - Risk classification (0-3)
+- `IR_Score` - Infection risk score
+- `Vector_Density_Index` - Vector abundance proxy
+- `Region1`, `Region2` - Administrative divisions
+
+**Analysis**: Prioritize resources by risk level
+
+**Example**:
+```python
+risk_stratification = df.groupby('Region1').agg({
+    'Outbreak_Risk_30d': 'max',
+    'IR_Score': 'mean'
+}).sort_values('IR_Score', ascending=False)
+```
+
+### 7. Extreme Climate Event Analysis
+
+**Objective**: Assess impact of weather extremes on transmission
+
+**Variables Used**:
+- `Hot_Days_Count` - Heat wave days
+- `Heavy_Rain_Days` - Flooding risk
+- `Dry_Days_Streak` - Drought conditions
+- `Wet_Days_Streak` - Prolonged rainfall
+
+**Analysis**: Identify transmission windows following extreme events
+
+**Example**:
+```python
+# Post-flood transmission risk
+post_flood = df[(df['Heavy_Rain_Days'] > 5) & (df['Humidity_Mean'] > 70)]
+```
+
+### 8. Intervention Timing Optimization
+
+**Objective**: Identify optimal timing for control measures
+
+**Variables Used**:
+- `Mosquito_Dev_Days` - Vector development conditions
+- `Persistence_Days` - Sustained risk periods
+- `Season` - Seasonal classification
+- `Temp_W1_Avg` to `W4_Avg` - Weekly temperature progression
+
+**Analysis**: Determine intervention windows
+
+**Example**:
+```python
+# Pre-monsoon intervention window
+pre_monsoon = df[(df['Season'] == 'summer') & (df['Mosquito_Dev_Days'] > 15)]
+```
+
+---
+
+## Output Variables (122 Total)
+
+| Category | Count | Key Variables |
+|----------|-------|---------------|
+| **Temperature** | 22 | Temp_Mean, Temp_Max, Temp_Std, Hot_Days_Count, Growing_Degree_Days |
+| **Precipitation** | 22 | Precip_Total, Precip_Days, Heavy_Rain_Days, Wet_Days_Streak |
+| **Humidity** | 13 | Humidity_Mean, High_Humidity_Days, Humidity_Change |
+| **Wind** | 10 | Wind_Mean, Wind_Max, Calm_Days |
+| **Interactions** | 12 | Heat_Index_Celsius, Discomfort_Index, Transmission_Risk_Proxy |
+| **Disease Indices** | 13 | EIP_Days, EIP_Category, Vector_Capacity, Larval_Survival |
+| **Composites** | 10 | Climate_Suitability_Index, Vector_Capacity, Wet_Season_Indicator |
+| **Temporal** | 4 | Month, Week_Number, Season, Day_Of_Year |
+| **Lagged** | 6 | Temp_Lag_7d, Precip_Anomaly, Temp_Trend |
+| **Metadata** | 7 | Date, Location, Regions |
+
+See [docs/OUTPUT_VARIABLES.md](docs/OUTPUT_VARIABLES.md) for complete documentation.
+
+---
 
 ## Climate Parameters
 
-| Parameter | Description | Unit |
-|-----------|-------------|------|
-| T2M | Temperature at 2 meters | °C |
-| PRECTOTCORR | Precipitation (corrected) | mm |
-| RH2M | Relative Humidity at 2 meters | % |
-| WS2M | Wind Speed at 2 meters | m/s |
+| Parameter | Description | Source |
+|-----------|-------------|--------|
+| T2M | Temperature at 2 meters | NASA POWER API |
+| PRECTOTCORR | Precipitation (corrected) | NASA POWER API |
+| RH2M | Relative Humidity at 2 meters | NASA POWER API |
+| WS2M | Wind Speed at 2 meters | NASA POWER API |
 
-See [docs/API_REFERENCE.md](docs/API_REFERENCE.md) for detailed API documentation.
-
-## Use Cases
-
-This toolkit is designed for:
-
-- **Infectious Disease Modeling**: Climate-disease transmission analysis
-- **Epidemiological Research**: Vector biology and climate relationships
-- **Health Surveillance**: Early warning system development
-- **Public Health Planning**: Climate-informed intervention strategies
-- **Academic Research**: Source data for publications
+---
 
 ## Data Sources
 
-- **Climate Data**: Satellite-based climate API (Public Domain)
-- **Health Data**: User-provided surveillance data
+- **Climate Data**: [NASA Langley Research Center POWER Project](https://power.larc.nasa.gov/) (Public Domain)
+- **Coverage**: Global land surfaces, 1981-present
+- **Resolution**: Daily temporal, point-based spatial
+
+---
 
 ## Ethical Statement
 
@@ -128,13 +294,20 @@ This toolkit is designed for legitimate public health research and epidemiologic
 
 See [docs/ETHICS_GUIDELINES.md](docs/ETHICS_GUIDELINES.md) for full guidelines.
 
+---
+
 ## Documentation
 
-- [Installation Guide](docs/INSTALLATION.md)
-- [Usage Instructions](docs/USAGE.md)
-- [API Reference](docs/API_REFERENCE.md)
-- [Output Variables](docs/OUTPUT_VARIABLES.md)
-- [Ethics Guidelines](docs/ETHICS_GUIDELINES.md)
+| Document | Description |
+|----------|-------------|
+| [SKILL.md](SKILL.md) | AI agent instructions and prompt templates |
+| [Installation Guide](docs/INSTALLATION.md) | Setup instructions |
+| [Usage Guide](docs/USAGE.md) | Detailed usage instructions |
+| [API Reference](docs/API_REFERENCE.md) | Climate API documentation |
+| [Output Variables](docs/OUTPUT_VARIABLES.md) | Complete variable dictionary |
+| [Ethics Guidelines](docs/ETHICS_GUIDELINES.md) | Data ethics and best practices |
+
+---
 
 ## Citation
 
@@ -155,36 +328,23 @@ If you use this toolkit in your research, please cite:
 
 ### APA 7th Edition
 ```
-Dr. Avinash M.. (2026). Climate Epidemiology Modeling Toolkit (Version 2.0) 
+Dr. Avinash M. (2026). Climate Epidemiology Modeling Toolkit (Version 2.0) 
 [Computer software]. GitHub. https://github.com/Infinitysouls/climate-epidemiology-modeling
 ```
 
-### IEEE
-```
-"Climate Epidemiology Modeling Toolkit," Dr. Avinash M., Version 2.0, Jan. 2026. 
-[Online]. Available: https://github.com/Infinitysouls/climate-epidemiology-modeling
-```
-
-### Harvard
-```
-@online{climate2026,
-  author = {Dr. Avinash M.},
-  title = {Climate Epidemiology Modeling Toolkit},
-  year = {2026},
-  url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},
-  accessdate = {April 2026}
-}
-```
-
-See also: `CITATION.cff` for formatted citation files.
+---
 
 ## License
 
 MIT License - See [LICENSE](LICENSE) file.
 
+---
+
 ## Contributing
 
-Contributions welcome! Please read the contribution guidelines and submit pull requests.
+Contributions welcome! Please submit pull requests or open issues for suggestions.
+
+---
 
 ## Support
 

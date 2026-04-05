@@ -2,21 +2,41 @@
 
 ## Description
 
-A Python toolkit for analyzing climate data in infectious disease epidemiology research. Fetches meteorological data from satellite-based climate APIs and computes 122 variables including epidemiological indices for disease transmission modeling.
+A Python toolkit for climate data analysis in infectious disease epidemiology research. Fetches satellite-based meteorological data and computes 122 variables including epidemiological indices for disease transmission modeling.
+
+## Scientific Background
+
+### Key Concepts
+
+| Concept | Definition |
+|---------|------------|
+| **Extrinsic Incubation Period (EIP)** | Time for pathogen development within vector; temperature-dependent |
+| **Vector Capacity** | Potential for vector-borne transmission; composite of density, survival, behavior |
+| **Climate Suitability Index** | Integrated measure of environmental conditions for transmission |
+| **Transmission Risk Proxy** | Empirical estimate of climate-driven transmission potential |
+
+### Climate-Disease Relationships
+
+| Climate Factor | Effect on Disease |
+|----------------|-------------------|
+| Temperature ↑ | Faster EIP, higher vector survival (up to threshold) |
+| Precipitation ↑ | More breeding sites, higher vector abundance |
+| Humidity ↑ | Longer vector survival, increased biting |
+| Wind | Affects vector dispersal and long-range spread |
 
 ## Capabilities
 
-- `fetch_climate_data` - Retrieve satellite-based climate data for any geographic location
-- `compute_epidemiological_indices` - Calculate EIP, vector capacity, transmission risk metrics
-- `analyze_climate_disease` - Correlate climate factors with disease transmission patterns
-- `generate_derived_variables` - Create interaction terms, composites, and lagged effects
+- `fetch_climate_data` - Retrieve satellite-based climate data for any location
+- `compute_epidemiological_indices` - Calculate EIP, vector capacity, transmission risk
+- `analyze_climate_disease` - Correlate climate with disease patterns
+- `generate_derived_variables` - Create interaction terms, composites, lags
 
 ## Prerequisites
 
 ### System Requirements
-- Python 3.8 or higher
-- pip package manager
-- Internet connection (for API access)
+- Python 3.8+
+- Internet connection
+- CSV data with location and date columns
 
 ### Python Dependencies
 ```
@@ -32,56 +52,52 @@ pip install -r requirements.txt
 
 ### Required CSV Structure
 
-The input CSV must contain these columns:
-
 | Column | Type | Example | Description |
 |--------|------|---------|-------------|
 | `[Date of Event]` | Date | 2017-05-15 | Event date (YYYY-MM-DD) |
 | `[Latitude]` | Float | 23.456 | Latitude (-90 to 90) |
 | `[Longitude]` | Float | 77.890 | Longitude (-180 to 180) |
-| `[Region1]` | String | StateName | Primary administrative region |
-| `[Region2]` | String | DistrictName | Secondary administrative region |
+| `[Region1]` | String | Rajasthan | Primary administrative region |
+| `[Region2]` | String | Jaipur | Secondary administrative region |
 
 ### Example CSV
 ```csv
 [Date of Event],[Latitude],[Longitude],[Region1],[Region2]
-2017-05-15,23.456,77.890,StateName,DistrictName
-2017-06-20,25.317,82.456,StateName,DistrictName
+2017-05-15,23.456,77.890,Rajasthan,Jaipur
+2017-06-20,25.317,82.456,Uttar Pradesh,Varanasi
+2017-07-10,19.876,75.456,Maharashtra,Pune
 ```
 
 ## Output
 
 ### 122 Computed Variables
 
-The script generates a CSV with 122 variables organized into categories:
-
-| Category | Count | Examples |
-|----------|-------|----------|
+| Category | Count | Key Variables |
+|----------|-------|---------------|
 | Metadata | 7 | Date, Latitude, Longitude, Region1, Region2, Climate_Start, Climate_End |
-| Temperature | 22 | Temp_Mean, Temp_Min, Temp_Max, Temp_P75, Hot_Days_Count |
+| Temperature | 22 | Temp_Mean, Temp_Max, Temp_P75, Hot_Days_Count, Growing_Degree_Days |
 | Precipitation | 22 | Precip_Total, Precip_Days, Heavy_Rain_Days, Wet_Days_Streak |
-| Humidity | 13 | Humidity_Mean, Humidity_Max, High_Humidity_Days |
-| Wind | 10 | Wind_Mean, Wind_Max, Calm_Days, Windy_Days |
-| Interactions | 12 | Heat_Index_Celsius, Discomfort_Index, Transmission_Risk_Proxy |
+| Humidity | 13 | Humidity_Mean, High_Humidity_Days, Humidity_Change |
+| Wind | 10 | Wind_Mean, Wind_Max, Calm_Days |
+| Interactions | 12 | Heat_Index_Celsius, Transmission_Risk_Proxy |
 | Disease Indices | 13 | EIP_Days, Vector_Capacity, Larval_Survival, IR_Score |
-| Composites | 10 | Climate_Suitability_Index, Vector_Capacity, Wet_Season_Indicator |
+| Composites | 10 | Climate_Suitability_Index, Wet_Season_Indicator |
 | Temporal | 4 | Month, Week_Number, Season |
-| Lagged | 6 | Temp_Lag_7d, Precip_Anomaly |
+| Lagged | 6 | Temp_Lag_7d, Precip_Anomaly, Temp_Trend |
 | Summary | 3 | Days_Data, Valid_Data_Flag, Processing_Status |
 
 ### Key Epidemiological Variables
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `EIP_Days` | Extrinsic Incubation Period - parasite development time | days |
-| `EIP_Category` | EIP risk classification | Low/Medium/High |
-| `Vector_Capacity` | Vector transmission capacity | 0-100 |
-| `Transmission_Risk_Proxy` | Climate transmission risk estimate | 0-100 |
-| `Larval_Survival` | Immature vector survival rate | % |
-| `Adult_Survival` | Adult vector survival rate | % |
-| `Mosquito_Dev_Days` | Suitable vector development days | days |
-| `Climate_Suitability_Index` | Overall climate suitability for transmission | 0-100 |
-| `Outbreak_Risk_30d` | 30-day outbreak risk scale | 0-3 |
+| Variable | Description | Interpretation |
+|----------|-------------|----------------|
+| `EIP_Days` | Parasite development time | Lower = faster transmission |
+| `EIP_Category` | Risk level | High/Medium/Low |
+| `Vector_Capacity` | Transmission potential (0-100) | Higher = more transmission potential |
+| `Larval_Survival` | Immature viability (%) | Higher = more breeding success |
+| `Adult_Survival` | Adult longevity (%) | Higher = longer infectious period |
+| `Mosquito_Dev_Days` | Vector development days | More days = higher abundance |
+| `Climate_Suitability_Index` | Overall suitability (0-100) | Higher = better conditions |
+| `Outbreak_Risk_30d` | 30-day risk (0-3) | 3 = highest risk |
 
 ## Usage
 
@@ -104,81 +120,127 @@ fetch_climate.bat
 
 ### Python API
 ```python
-from fetch_climate import fetch_daily_data, compute_all_metrics
 from datetime import datetime
+from fetch_climate import fetch_daily_data, compute_all_metrics
 
-# Fetch data for single location
+# Fetch and compute
 daily_data = fetch_daily_data(23.456, 77.890, "2017-05-01", "2017-05-31")
-
-# Compute all metrics
 metrics = compute_all_metrics(daily_data, datetime(2017, 5, 15))
 
-print(f"EIP Days: {metrics['EIP_Days']}")
+# Key epidemiological metrics
+print(f"EIP: {metrics['EIP_Days']} days")
 print(f"Vector Capacity: {metrics['Vector_Capacity']}")
+print(f"Risk Level: {metrics['Outbreak_Risk_30d']}")
 ```
 
-## AI Prompt Templates
+## AI Prompt Templates for Scientific Analysis
 
-Use these ready-to-use prompts with coding assistants:
-
-### Template 1: Basic Data Fetch
+### Template 1: Risk Assessment
 ```
-Fetch climate data for all locations in my outbreak CSV file and save results to climate_output.csv
-```
-
-### Template 2: Filter High Risk Areas
-```
-Analyze the climate_output.csv and identify locations with EIP_Category = "High" and Vector_Capacity > 50
+Analyze the climate_output.csv and:
+1. Identify locations with EIP_Category = "High" AND Vector_Capacity > 60
+2. Calculate the proportion of high-risk areas by Region1
+3. Create a risk stratification (low/medium/high) based on Outbreak_Risk_30d
 ```
 
-### Template 3: Statistical Analysis
+### Template 2: Seasonal Transmission Patterns
 ```
-Perform correlation analysis between Temperature_Mean and Transmission_Risk_Proxy in the output CSV
-```
-
-### Template 4: Time Series Analysis
-```
-Create a time series plot showing Temp_Mean trends across all events in the data
-```
-
-### Template 5: Risk Mapping
-```
-Generate a risk map showing Outbreak_Risk_30d values by Region1
+Perform seasonal analysis on climate_output.csv:
+1. Group data by Season column
+2. Calculate mean Vector_Capacity, EIP_Days, and Transmission_Risk_Proxy per season
+3. Identify which season has the highest transmission potential
+4. Create summary statistics table
 ```
 
-### Template 6: Seasonal Analysis
+### Template 3: Correlation Analysis
 ```
-Compare Vector_Capacity across different seasons (summer, monsoon, winter)
-```
-
-### Template 7: Extreme Events
-```
-Identify locations with Hot_Days_Count > 20 and Heavy_Rain_Days > 5
-```
-
-### Template 8: Export Subsets
-```
-Export only locations in the monsoon season with Climate_Suitability_Index > 60
+For the climate_output.csv data:
+1. Calculate Pearson correlation between Temp_Mean and Transmission_Risk_Proxy
+2. Calculate correlation between Precip_Total and Vector_Capacity
+3. Test significance (p < 0.05)
+4. Create scatter plots with regression lines
 ```
 
-### Template 9: Summary Statistics
+### Template 4: Geographic Risk Mapping
 ```
-Calculate mean, median, and standard deviation for all disease indices by Region1
-```
-
-### Template 10: Data Quality Check
-```
-Identify records where Valid_Data_Flag = 0 or Days_Data < 25
-```
-
-### Template 11: Custom Analysis
-```
-For locations with EIP_Category = "High", calculate the correlation between humidity metrics and transmission risk
+From climate_output.csv:
+1. Create a risk score combining Vector_Capacity and Outbreak_Risk_30d
+2. Rank regions by mean risk score (Region1 level)
+3. Identify top 5 highest-risk administrative regions
+4. Generate summary table with 95% confidence intervals
 ```
 
-### Template 12: Visualization
+### Template 5: Extreme Event Analysis
 ```
-Create a scatter plot of Temp_Mean vs Precip_Total colored by Season
+Analyze the relationship between extreme climate events and risk:
+1. Filter locations with Hot_Days_Count > 20 OR Heavy_Rain_Days > 5
+2. Compare Vector_Capacity between extreme and non-extreme locations
+3. Perform t-test for statistical significance
+4. Calculate odds ratio for high-risk classification
+```
+
+### Template 6: Entomological Assessment
+```
+From climate_output.csv, assess vector entomological conditions:
+1. Identify locations with Larval_Survival > 70% AND Vector_Fecundity > 5
+2. Calculate mean Blood_Feeding_Rate by Region1
+3. Estimate vector density proxy (Vector_Density_Index) distribution
+4. Create entomological risk categories
+```
+
+### Template 7: Temporal Trend Analysis
+```
+Analyze temporal patterns in climate_output.csv:
+1. Calculate Temp_Trend and Precip_Anomaly statistics
+2. Identify locations with positive transmission trend
+3. Calculate persistence of risk conditions (Persistence_Days)
+4. Create time-series visualization of risk metrics
+```
+
+### Template 8: Climate Suitability Modeling
+```
+Build climate suitability model:
+1. Use Climate_Suitability_Index as dependent variable
+2. Identify key predictors (Temp_Mean, Precip_Total, Humidity_Mean)
+3. Fit multiple linear regression
+4. Calculate R-squared and identify significant predictors
+5. Create suitability prediction equation
+```
+
+### Template 9: Intervention Prioritization
+```
+For resource allocation planning:
+1. Rank locations by composite risk score (Vector_Capacity + IR_Score + Outbreak_Risk_30d)
+2. Identify intervention priority zones (top 20% by risk)
+3. Calculate population-level risk by Region1
+4. Generate prioritized intervention list
+```
+
+### Template 10: Data Quality Assessment
+```
+Data quality report:
+1. Identify records where Valid_Data_Flag = 0
+2. Check Days_Data distribution (should be ≥25 for reliability)
+3. Calculate completeness percentage for each variable
+4. Flag locations requiring data validation
+```
+
+### Template 11: Lag Effect Analysis
+```
+Analyze delayed climate effects on transmission:
+1. Compare Temp_Lag_7d with current Temp_Mean
+2. Calculate correlation between Precip_Anomaly and IR_Score
+3. Identify optimal lag period for prediction modeling
+4. Build lagged regression model
+```
+
+### Template 12: Comparative Risk Analysis
+```
+Comparative analysis across regions:
+1. Perform ANOVA comparing Vector_Capacity across Region1 groups
+2. Use Tukey HSD post-hoc test for pairwise comparisons
+3. Calculate effect sizes (Cohen's d) for region differences
+4. Create forest plot of regional risk estimates
 ```
 
 ## Integration Patterns
@@ -186,19 +248,30 @@ Create a scatter plot of Temp_Mean vs Precip_Total colored by Season
 ### With Pandas
 ```python
 import pandas as pd
+import numpy as np
+from scipy import stats
 
 df = pd.read_csv('climate_output.csv')
 
-# High risk areas
+# Risk filtering
 high_risk = df[(df['EIP_Category'] == 'High') & (df['Vector_Capacity'] > 60)]
 
-# Seasonal summary
-seasonal = df.groupby('Season')[['EIP_Days', 'Vector_Capacity']].mean()
+# Regional summary
+regional = df.groupby('Region1').agg({
+    'Vector_Capacity': ['mean', 'std'],
+    'EIP_Days': 'mean',
+    'Outbreak_Risk_30d': 'mean'
+}).round(2)
+
+# Correlation matrix
+corr_cols = ['Temp_Mean', 'Precip_Total', 'Humidity_Mean', 'Vector_Capacity']
+correlation = df[corr_cols].corr()
 ```
 
 ### With R
 ```r
 library(tidyverse)
+library(rstatix)
 
 df <- read_csv('climate_output.csv')
 
@@ -206,45 +279,75 @@ df <- read_csv('climate_output.csv')
 high_risk <- df %>%
   filter(EIP_Category == 'High', Vector_Capacity > 60)
 
-# Correlation
-cor(df$Temp_Mean, df$Transmission_Risk_Proxy)
+# Regional comparison
+regional_summary <- df %>%
+  group_by(Region1) %>%
+  summarise(
+    mean_capacity = mean(Vector_Capacity, na.rm = TRUE),
+    mean_eip = mean(EIP_Days, na.rm = TRUE)
+  )
+
+# ANOVA
+anova_result <- aov(Vector_Capacity ~ Season, data = df)
+summary(anova_result)
 ```
 
 ### With QGIS
 ```
-Import climate_output.csv as delimited text layer
-Style by Vector_Capacity using graduated symbols
-Label by Region2
+1. Import climate_output.csv as Delimited Text Layer
+2. Join with regional shapefile by Region1
+3. Style Vector_Capacity using graduated symbols
+4. Create heat map of Outbreak_Risk_30d
+5. Label high-risk zones
 ```
 
 ### With Statistical Software
 ```python
-# SPSS/R/SAS import
-df.to_csv('climate_for_analysis.csv', index=False)
-# Then import into your preferred statistical software
+# Export for SPSS/Stata/SAS
+df.to_csv('epidemiology_analysis.csv', index=False)
+
+# Variables for analysis:
+# DV: Vector_Capacity, Outbreak_Risk_30d
+# IV: Temp_Mean, Precip_Total, Humidity_Mean
+# Controls: Region1, Season
 ```
 
 ## Tips for AI Agents
 
 ### Data Handling
-1. Always validate CSV column names match the required format
-2. Check for missing values in latitude/longitude
+1. Validate column names match required format exactly
+2. Check for missing coordinates (latitude/longitude = NA)
 3. Verify date format is YYYY-MM-DD
+4. Filter out records with Valid_Data_Flag = 0 for analysis
 
-### Variable Selection
-1. For transmission modeling: Focus on `EIP_Days`, `Vector_Capacity`, `Transmission_Risk_Proxy`
-2. For climate analysis: Focus on `Temp_Mean`, `Precip_Total`, `Humidity_Mean`
-3. For risk stratification: Use `Outbreak_Risk_30d`, `Climate_Suitability_Index`
+### Variable Selection by Analysis Type
 
-### Performance
-1. Process large datasets in batches of 100 records
-2. The script includes 0.3s delay between API calls (respects rate limits)
-3. For 300+ locations, expect 30-60 minutes processing time
+| Analysis | Primary Variables | Secondary Variables |
+|----------|-----------------|-------------------|
+| Transmission modeling | EIP_Days, Vector_Capacity | IR_Score, Outbreak_Risk_30d |
+| Entomological | Larval_Survival, Adult_Survival | Vector_Fecundity, Gonotrophic_Cycle |
+| Climate drivers | Temp_Mean, Precip_Total, Humidity_Mean | Temp_Trend, Precip_Anomaly |
+| Risk stratification | Outbreak_Risk_30d, Climate_Suitability_Index | Critical_Threshold |
+| Seasonal patterns | Season, Mosquit_Dev_Days, Persistence_Days | Weekly temperature/precip |
 
-### Error Handling
-1. Records with insufficient data get `Valid_Data_Flag = 0`
-2. Check `Processing_Status` column for errors
-3. API errors are logged with error messages in output
+### Statistical Recommendations
+1. Use non-parametric tests for non-normal distributions
+2. Apply Bonferroni correction for multiple comparisons
+3. Report effect sizes alongside p-values
+4. Consider mixed-effects models for hierarchical data
+
+### Performance Optimization
+1. Process in batches of 100 for large datasets
+2. API rate limiting: 0.3s delay included in script
+3. Expect 30-60 minutes for 300+ locations
+4. Enable parallel processing for multiple files
+
+### Error Interpretation
+| Error | Cause | Solution |
+|-------|-------|----------|
+| Valid_Data_Flag = 0 | <25 days of data | Check API coverage for location |
+| Processing_Status = Error | API failure | Retry or check coordinates |
+| null values | Missing satellite data | Use valid_data filter |
 
 ## Default Thresholds
 
@@ -256,12 +359,15 @@ df.to_csv('climate_for_analysis.csv', index=False)
 | Heavy rain | > 10mm | Heavy_Rain_Days |
 | High humidity | > 80% | High_Humidity_Days |
 | Calm wind | < 2 m/s | Calm_Days |
+| Tropical night | Tmin > 20°C | Tropical_Nights |
+| Heat stress | HI > 35°C | Heat_Stress_Days |
 
 ## Data Sources
 
-- **Climate Data**: Satellite-based climate API (Public Domain)
+- **Climate Data**: NASA Langley Research Center POWER Project
 - **API Endpoint**: https://power.larc.nasa.gov/api/temporal/daily/point
-- **Coverage**: Global, 1981-present
+- **Coverage**: Global land surfaces, July 1981 - present
+- **Resolution**: Daily temporal, point-based spatial
 
 ## Citation
 
@@ -276,32 +382,14 @@ If using results from this toolkit, please cite:
   year = {2026},
   month = {April},
   url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},
-  doi = {10.5281/zenodo.XXX},
   license = {MIT}
 }
 ```
 
 ### APA 7th Edition
 ```
-Dr. Avinash M.. (2026). Climate Epidemiology Modeling Toolkit (Version 2.0) 
+Dr. Avinash M. (2026). Climate Epidemiology Modeling Toolkit (Version 2.0) 
 [Computer software]. GitHub. https://github.com/Infinitysouls/climate-epidemiology-modeling
-```
-
-### IEEE
-```
-"Climate Epidemiology Modeling Toolkit," Dr. Avinash M., Version 2.0, Jan. 2026. 
-[Online]. Available: https://github.com/Infinitysouls/climate-epidemiology-modeling
-```
-
-### Harvard
-```
-@online{climate2026,
-  author = {Dr. Avinash M.},
-  title = {Climate Epidemiology Modeling Toolkit},
-  year = {2026},
-  url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},
-  accessdate = {April 2026}
-}
 ```
 
 ## License

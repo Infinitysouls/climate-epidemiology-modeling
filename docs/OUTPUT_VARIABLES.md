@@ -1,265 +1,414 @@
 # Output Variables Documentation
 
-Complete dictionary of all variables computed by the Climate Epidemiology Modeling Toolkit.
+Complete dictionary of all 122 variables computed by the Climate Epidemiology Modeling Toolkit.
+
+---
+
+## Scientific Background
+
+### Climate-Disease Transmission Framework
+
+The toolkit computes variables based on the conceptual framework linking environmental conditions to infectious disease transmission:
+
+```
+Environmental Conditions → Vector Biology → Transmission Potential → Outbreak Risk
+     (T, P, RH, Wind)    (EIP, Survival)     (Vector Capacity)      (Risk Score)
+```
+
+### Key Epidemiological Relationships
+
+| Variable Category | Scientific Relevance |
+|------------------|---------------------|
+| Temperature | Affects pathogen development rate, vector metabolism, survival |
+| Precipitation | Creates breeding sites, influences vector abundance |
+| Humidity | Affects vector desiccation resistance, biting behavior |
+| Wind | Influences vector dispersal, pathogen spread |
+| Disease Indices | Integrate multiple factors for transmission estimates |
 
 ---
 
 ## Metadata (7 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Date of Event` | Original event date | YYYY-MM-DD |
-| `Latitude` | Location latitude | degrees |
-| `Longitude` | Location longitude | degrees |
-| `Region1` | Primary administrative region | - |
-| `Region2` | Secondary administrative region | - |
-| `Climate_Start` | Start of 30-day data window | YYYY-MM-DD |
-| `Climate_End` | End of 30-day data window | YYYY-MM-DD |
+| Variable | Type | Description | Unit |
+|----------|------|-------------|------|
+| `Date of Event` | Date | Original event/outbreak date | YYYY-MM-DD |
+| `Latitude` | Float | Location latitude | degrees |
+| `Longitude` | Float | Location longitude | degrees |
+| `Region1` | String | Primary administrative region (e.g., State/Province) | - |
+| `Region2` | String | Secondary administrative region (e.g., District/County) | - |
+| `Climate_Start` | Date | Start of 30-day climate data window | YYYY-MM-DD |
+| `Climate_End` | Date | End of 30-day climate data window | YYYY-MM-DD |
 
 ---
 
-## Temperature Statistics (20 variables)
+## Temperature Statistics (22 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Temp_Mean` | Mean temperature | °C |
-| `Temp_Min` | Minimum temperature | °C |
-| `Temp_Max` | Maximum temperature | °C |
-| `Temp_Std` | Standard deviation | °C |
-| `Temp_Range` | Temperature range (max - min) | °C |
-| `Temp_P25` | 25th percentile | °C |
-| `Temp_P50` | Median temperature | °C |
-| `Temp_P75` | 75th percentile | °C |
-| `Temp_P90` | 90th percentile | °C |
-| `Temp_W1_Avg` | Week 1 mean (first 25% of days) | °C |
-| `Temp_W2_Avg` | Week 2 mean | °C |
-| `Temp_W3_Avg` | Week 3 mean | °C |
-| `Temp_W4_Avg` | Week 4 mean (last 25% of days) | °C |
-| `Hot_Days_Count` | Days with temp > 30°C | days |
-| `Cold_Days_Count` | Days with temp < 15°C | days |
-| `Very_Hot_Days` | Days with temp > 35°C | days |
-| `Ideal_Days` | Days with temp 20-30°C | days |
-| `Growing_Degree_Days` | Accumulated heat units (base 10°C) | °C-days |
-| `Diurnal_Range_Avg` | Average daily temperature range | °C |
-| `Temp_Trend` | Temperature trend direction (1=up, -1=down) | - |
-| `Temp_Change_Rate` | Rate of temperature change | °C/day |
-| `Temp_Skewness` | Temperature distribution skewness | - |
-| `Temp_Kurtosis` | Temperature distribution kurtosis | - |
+### Basic Statistics
 
----
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Temp_Mean` | Mean temperature over 30-day window | Primary driver of EIP and vector metabolism | °C |
+| `Temp_Min` | Minimum temperature | Affects overnight vector survival | °C |
+| `Temp_Max` | Maximum temperature | Influences stress thresholds | °C |
+| `Temp_Std` | Standard deviation | Indicates temperature variability | °C |
+| `Temp_Range` | Temperature range (max - min) | Daily thermal amplitude | °C |
 
-## Precipitation Statistics (18 variables)
+### Percentiles
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Precip_Total` | Total precipitation | mm |
-| `Precip_Days` | Number of rainy days | days |
-| `Precip_Mean_Daily` | Mean daily precipitation | mm/day |
-| `Precip_Max_Daily` | Maximum daily precipitation | mm |
-| `Precip_Std` | Precipitation variability | mm |
-| `Precip_P25` | 25th percentile | mm |
-| `Precip_P75` | 75th percentile | mm |
-| `No_Rain_Days` | Days with zero precipitation | days |
-| `Rain_Probability` | Probability of rain | % |
-| `Rain_Volume_CV` | Coefficient of variation | % |
-| `Precip_W1_Total` | Week 1 precipitation total | mm |
-| `Precip_W2_Total` | Week 2 precipitation total | mm |
-| `Precip_W3_Total` | Week 3 precipitation total | mm |
-| `Precip_W4_Total` | Week 4 precipitation total | mm |
-| `Heavy_Rain_Days` | Days with precip > 10mm | days |
-| `Very_Heavy_Rain_Days` | Days with precip > 25mm | days |
-| `Moderate_Rain_Days` | Days with precip 5-10mm | days |
-| `Cumulative_7d` | 7-day cumulative precipitation | mm |
-| `Cumulative_14d` | 14-day cumulative precipitation | mm |
-| `Wet_Days_Streak` | Longest consecutive wet period | days |
-| `Dry_Days_Streak` | Longest consecutive dry period | days |
-| `Precip_Intensity_Ratio` | Heavy rain to total ratio | - |
-| `Precip_Intensity` | Mean precipitation on rainy days | mm/day |
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Temp_P25` | 25th percentile | Lower temperature exposure | °C |
+| `Temp_P50` | Median temperature | Central tendency | °C |
+| `Temp_P75` | 75th percentile | Upper temperature exposure | °C |
+| `Temp_P90` | 90th percentile | Extreme high temperature | °C |
+
+### Weekly Averages
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Temp_W1_Avg` | Week 1 mean (first 25% of days) | Early period temperature | °C |
+| `Temp_W2_Avg` | Week 2 mean | Mid-period temperature | °C |
+| `Temp_W3_Avg` | Week 3 mean | Late period temperature | °C |
+| `Temp_W4_Avg` | Week 4 mean (last 25% of days) | Final period temperature | °C |
+
+### Threshold Counts
+
+| Variable | Threshold | Scientific Relevance | Unit |
+|----------|-----------|---------------------|------|
+| `Hot_Days_Count` | > 30°C | Heat stress days for vectors | days |
+| `Cold_Days_Count` | < 15°C | Cold stress limiting development | days |
+| `Very_Hot_Days` | > 35°C | Extreme heat potentially lethal | days |
+| `Ideal_Days` | 20-30°C | Optimal temperature range | days |
+
+### Derived Indices
+
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `Growing_Degree_Days` | Σ(T - 10) for T > 10°C | Accumulated heat for development | °C-days |
+| `Diurnal_Range_Avg` | Mean(max - min) | Daily thermal amplitude | °C |
+| `Temp_Trend` | Direction of change | Warming/cooling pattern | -1/0/1 |
+| `Temp_Change_Rate` | (T_final - T_initial) / days | Rate of temperature change | °C/day |
+| `Temp_Skewness` | Distribution asymmetry | Temperature distribution shape | - |
+| `Temp_Kurtosis` | Distribution peakedness | Temperature extreme frequency | - |
 
 ---
 
-## Humidity Statistics (12 variables)
+## Precipitation Statistics (22 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Humidity_Mean` | Mean relative humidity | % |
-| `Humidity_Min` | Minimum humidity | % |
-| `Humidity_Max` | Maximum humidity | % |
-| `Humidity_Std` | Humidity variability | % |
-| `Humidity_Range` | Humidity range (max - min) | % |
-| `Humidity_P25` | 25th percentile | % |
-| `Humidity_P75` | 75th percentile | % |
-| `Humidity_W1_Avg` | Week 1 mean humidity | % |
-| `Humidity_W2_Avg` | Week 2 mean humidity | % |
-| `Humidity_W3_Avg` | Week 3 mean humidity | % |
-| `Humidity_W4_Avg` | Week 4 mean humidity | % |
-| `High_Humidity_Days` | Days with humidity > 80% | days |
-| `Low_Humidity_Days` | Days with humidity < 40% | days |
-| `Humidity_Change` | Change in humidity over period | % |
+### Basic Statistics
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Precip_Total` | Total precipitation | Water availability for breeding | mm |
+| `Precip_Days` | Number of rainy days | Breeding site frequency | days |
+| `Precip_Mean_Daily` | Mean daily precipitation | Average water input | mm/day |
+| `Precip_Max_Daily` | Maximum daily precipitation | Potential flooding | mm |
+| `Precip_Std` | Precipitation variability | Rainfall stability | mm |
+
+### Percentiles
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Precip_P25` | 25th percentile | Light rainfall | mm |
+| `Precip_P75` | 75th percentile | Heavy rainfall | mm |
+
+### Days Count
+
+| Variable | Threshold | Scientific Relevance | Unit |
+|----------|-----------|---------------------|------|
+| `No_Rain_Days` | = 0mm | Dry conditions, breeding site loss | days |
+| `Heavy_Rain_Days` | > 10mm | May flush breeding sites | days |
+| `Very_Heavy_Rain_Days` | > 25mm | Significant flooding | days |
+| `Moderate_Rain_Days` | 5-10mm | Ideal breeding conditions | days |
+
+### Derived Indices
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Rain_Probability` | % of rainy days | Breeding site persistence | % |
+| `Rain_Volume_CV` | Coefficient of variation | Precipitation variability | % |
+| `Precip_Intensity_Ratio` | Heavy rain / total | Rainfall intensity pattern | - |
+| `Precip_Intensity` | Mean on rainy days | Rainfall intensity | mm/day |
+
+### Weekly Totals
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Precip_W1_Total` | Week 1 precipitation | Early period rainfall | mm |
+| `Precip_W2_Total` | Week 2 precipitation | Mid-period rainfall | mm |
+| `Precip_W3_Total` | Week 3 precipitation | Late period rainfall | mm |
+| `Precip_W4_Total` | Week 4 precipitation | Final period rainfall | mm |
+
+### Cumulative
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Cumulative_7d` | 7-day total | Recent rainfall accumulation | mm |
+| `Cumulative_14d` | 14-day total | Extended rainfall pattern | mm |
+
+### Streaks
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Wet_Days_Streak` | Max consecutive rainy days | Sustained breeding conditions | days |
+| `Dry_Days_Streak` | Max consecutive dry days | Drought stress, breeding site loss | days |
+
+---
+
+## Humidity Statistics (13 variables)
+
+### Basic Statistics
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Humidity_Mean` | Mean relative humidity | Vector desiccation resistance | % |
+| `Humidity_Min` | Minimum humidity | Desiccation stress period | % |
+| `Humidity_Max` | Maximum humidity | Peak moisture conditions | % |
+| `Humidity_Std` | Humidity variability | Moisture stability | % |
+| `Humidity_Range` | Humidity range | Daily moisture amplitude | % |
+
+### Percentiles
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Humidity_P25` | 25th percentile | Lower moisture exposure | % |
+| `Humidity_P75` | 75th percentile | Upper moisture exposure | % |
+
+### Weekly Averages
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Humidity_W1_Avg` | Week 1 mean humidity | Early period moisture | % |
+| `Humidity_W2_Avg` | Week 2 mean humidity | Mid-period moisture | % |
+| `Humidity_W3_Avg` | Week 3 mean humidity | Late period moisture | % |
+| `Humidity_W4_Avg` | Week 4 mean humidity | Final period moisture | % |
+
+### Threshold Counts
+
+| Variable | Threshold | Scientific Relevance | Unit |
+|----------|-----------|---------------------|------|
+| `High_Humidity_Days` | > 80% | Optimal for vector survival | days |
+| `Low_Humidity_Days` | < 40% | Desiccation risk | days |
+
+### Derived
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Humidity_Change` | Change over period | Moisture trend | % |
 
 ---
 
 ## Wind Statistics (10 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Wind_Mean` | Mean wind speed | m/s |
-| `Wind_Max` | Maximum wind speed | m/s |
-| `Wind_Std` | Wind variability | m/s |
-| `Wind_P25` | 25th percentile | m/s |
-| `Wind_P75` | 75th percentile | m/s |
-| `Calm_Days` | Days with wind < 2 m/s | days |
-| `Windy_Days` | Days with wind > 5 m/s | days |
-| `Moderate_Wind_Days` | Days with wind 2-5 m/s | days |
-| `Very_Windy_Days` | Days with wind > 8 m/s | days |
-| `Calm_Percentage` | Percentage of calm days | % |
-| `Wind_Gust_Proxy` | Estimated wind gusts | m/s |
+### Basic Statistics
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Wind_Mean` | Mean wind speed | Vector dispersal potential | m/s |
+| `Wind_Max` | Maximum wind speed | Extreme dispersal events | m/s |
+| `Wind_Std` | Wind variability | Wind pattern stability | m/s |
+
+### Percentiles
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Wind_P25` | 25th percentile | Calm conditions | m/s |
+| `Wind_P75` | 75th percentile | Windy conditions | m/s |
+
+### Threshold Counts
+
+| Variable | Threshold | Scientific Relevance | Unit |
+|----------|-----------|---------------------|------|
+| `Calm_Days` | < 2 m/s | Stagnant air, pathogen accumulation | days |
+| `Windy_Days` | > 5 m/s | Vector dispersal, dilution | days |
+| `Moderate_Wind_Days` | 2-5 m/s | Moderate dispersal | days |
+| `Very_Windy_Days` | > 8 m/s | Strong dispersal | days |
+
+### Derived
+
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `Calm_Percentage` | Calm_Days / Total × 100 | Stagnation frequency | % |
+| `Wind_Gust_Proxy` | Wind_Max × 1.5 | Estimated gusts | m/s |
 
 ---
 
 ## Two-Variable Interactions (12 variables)
 
-| Variable | Description | Formula/Notes |
-|----------|-------------|--------------|
-| `Heat_Index_Celsius` | Apparent temperature | f(T, RH) |
-| `Discomfort_Index` | Thermal discomfort | (T + RH) / 2 |
-| `Tropical_Nights` | Nights with Tmin > 20°C | days |
-| `Warm_Nights` | Nights with Tmin > 25°C | days |
-| `Summer_Season` | Days with T > 25 & RH > 70% | days |
-| `Muggy_Days` | Days with T > 20 & RH > 80% | days |
-| `Dry_Heat_Days` | Days with T > 30 & RH < 40% | days |
-| `Humid_Cold_Days` | Days with T < 15 & RH > 70% | days |
-| `Transmission_Risk_Proxy` | Climate transmission risk | T × RH / 100 |
-| `Rain_Spread_Risk` | Rain dispersal by wind | P × Wind |
-| `Precip_Wind_Ratio` | Precipitation to wind ratio | P / Wind |
-| `Evaporation_Proxy` | Estimated evaporation | f(T, RH, Wind) |
-| `Drying_Rate` | Soil drying indicator | f(T, RH) |
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `Heat_Index_Celsius` | T + 0.5×(RH-40) | Apparent temperature, thermal stress | °C |
+| `Discomfort_Index` | (T + RH) / 2 | Combined thermal-moisture discomfort | °C/% |
+| `Tropical_Nights` | Nights Tmin > 20°C | Warm overnight conditions | days |
+| `Warm_Nights` | Nights Tmin > 25°C | Hot overnight conditions | days |
+| `Summer_Season` | Days T>25 & RH>70% | Optimal transmission conditions | days |
+| `Muggy_Days` | Days T>20 & RH>80% | High moisture stress | days |
+| `Dry_Heat_Days` | Days T>30 & RH<40% | Heat + desiccation stress | days |
+| `Humid_Cold_Days` | Days T<15 & RH>70% | Cold + moisture stress | days |
+| `Transmission_Risk_Proxy` | T × RH / 100 | Empirical transmission estimate | - |
+| `Rain_Spread_Risk` | P × Wind | Pathogen dispersal by rain | - |
+| `Precip_Wind_Ratio` | P / Wind | Rain dilution effect | - |
+| `Evaporation_Proxy` | T × (100-RH) × Wind | Drying rate estimate | - |
+| `Drying_Rate` | T × (100-RH) × 0.05 | Soil drying indicator | - |
 
 ---
 
-## Disease/Epidemiological Indices (12 variables)
+## Disease/Epidemiological Indices (13 variables)
 
-| Variable | Description | Formula/Notes |
-|----------|-------------|--------------|
-| `EIP_Days` | Extrinsic Incubation Period | f(T) - parasite development time |
-| `EIP_Category` | EIP risk level | Low / Medium / High |
-| `Larval_Survival` | Immature vector survival | f(T) - larval viability |
-| `Adult_Survival` | Adult vector survival | f(T, RH) - adult viability |
-| `Vector_Fecundity` | Vector breeding capacity | f(T, RH) |
-| `Gonotrophic_Cycle` | Egg laying cycle duration | f(T) - days |
-| `Blood_Feeding_Rate` | Vector feeding frequency | f(T) - % |
-| `Vector_Density_Index` | Estimated vector density | composite score |
-| `IR_Score` | Infection risk score | composite |
-| `Outbreak_Risk_30d` | 30-day outbreak risk | 0-3 scale |
-| `Critical_Threshold` | Risk threshold exceeded | 0 / 1 |
-| `Mosquito_Dev_Days` | Suitable vector development days | days with T>20, RH>60, P>0 |
-| `Persistence_Days` | Consecutive risk days | days |
+### Extrinsic Incubation Period (EIP)
+
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `EIP_Days` | f(T_mean) | Parasite development time | days |
+| `EIP_Category` | Based on EIP_Days | Risk classification | Low/Medium/High |
+
+**EIP Interpretation**: Lower EIP = faster pathogen development = higher transmission potential
+
+### Vector Survival Indices
+
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `Larval_Survival` | f(T) | Immature vector viability | % |
+| `Adult_Survival` | f(T, RH) | Adult vector longevity | % |
+
+### Vector Biology
+
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `Vector_Fecundity` | f(T, RH) | Vector reproductive capacity | - |
+| `Gonotrophic_Cycle` | f(T) | Time between blood meals | days |
+| `Blood_Feeding_Rate` | f(T) | Feeding frequency estimate | % |
+| `Vector_Density_Index` | Composite | Estimated vector abundance | 0-100 |
+
+### Transmission Risk
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `IR_Score` | Infection risk score | Composite transmission risk | - |
+| `Outbreak_Risk_30d` | 30-day risk (0-3) | Short-term outbreak risk | 0-3 |
+| `Critical_Threshold` | Binary indicator | High-risk threshold exceeded | 0/1 |
+
+### Vector Development
+
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Mosquito_Dev_Days` | Days with T>20, RH>60, P>0 | Vector development conditions | days |
+| `Persistence_Days` | Consecutive risk days | Sustained transmission window | days |
 
 ---
 
 ## Multi-Variable Composites (10 variables)
 
-| Variable | Description | Formula/Notes |
-|----------|-------------|--------------|
-| `Combined_Stress` | Combined environmental stress | f(T, RH, Wind) |
-| `Meteorological_WBGT` | Wet Bulb Globe Temperature | heat stress index |
-| `Pet_Proxy` | Potential Evapotranspiration proxy | f(T, RH, Wind) |
-| `Aridity_Index` | Aridity measure | P / (T + 10) |
-| `Moisture_Index` | Moisture availability | (RH × P) / (T + 20) |
-| `Climate_Health_Risk` | Overall climate health risk | composite 0-100 |
-| `Vector_Capacity` | Vector transmission capacity | f(T, RH, P) |
-| `Wet_Season_Indicator` | Wet season indicator | 0 / 1 |
-| `Stagnant_Air_Days` | Calm humid days | days with WS < 2 |
-| `Heat_Stress_Days` | Days with heat stress | days with HI > 35 |
-| `Climate_Suitability_Index` | Overall climate suitability | composite 0-100 |
+| Variable | Formula | Scientific Relevance | Unit |
+|----------|---------|---------------------|------|
+| `Combined_Stress` | T + RH/2 + Wind×2 | Multi-factor environmental stress | - |
+| `Meteorological_WBGT` | 0.567T + 0.214RH - 0.6Wind + 1.2 | Wet bulb globe temperature | °C |
+| `Pet_Proxy` | Approximation | Potential evapotranspiration | mm |
+| `Aridity_Index` | P / (T + 10) | Aridity measure | - |
+| `Moisture_Index` | (RH × P) / (T + 20) | Moisture availability | - |
+| `Climate_Health_Risk` | Composite | Overall climate health risk | 0-100 |
+| `Vector_Capacity` | f(T, RH, P) | Vector transmission potential | 0-100 |
+| `Wet_Season_Indicator` | P > 100mm | Monsoon/wet season | 0/1 |
+| `Stagnant_Air_Days` | WS < 2 m/s days | Calm humid conditions | days |
+| `Heat_Stress_Days` | HI > 35 days | Heat stress days | days |
+| `Climate_Suitability_Index` | Weighted composite | Overall transmission suitability | 0-100 |
 
 ---
 
 ## Temporal Features (4 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Month` | Event month | 1-12 |
-| `Week_Number` | ISO week number | 1-53 |
-| `Day_Of_Year` | Day of year | 1-366 |
-| `Season` | Season classification | winter/summer/monsoon/post_monsoon |
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Month` | Event month | Seasonality | 1-12 |
+| `Week_Number` | ISO week | Temporal granularity | 1-53 |
+| `Day_Of_Year` | Day number | Annual position | 1-366 |
+| `Season` | Season classification | Winter/Summer/Monsoon/Post-monsoon | - |
+
+### Season Classification
+
+| Month Range | Season | Transmission Pattern |
+|-------------|--------|---------------------|
+| Dec-Feb | Winter | Low transmission |
+| Mar-May | Summer | Pre-monsoon, rising risk |
+| Jun-Sep | Monsoon | Peak transmission |
+| Oct-Nov | Post-monsoon | Declining risk |
 
 ---
 
 ## Lagged Effects (6 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Temp_Lag_7d` | 7-day lagged temperature | °C |
-| `Temp_Lag_14d` | 14-day lagged temperature | °C |
-| `Precip_Lag_7d` | 7-day lagged precipitation | mm |
-| `Precip_Lag_14d` | 14-day lagged precipitation | mm |
-| `Temp_Anomaly` | Temperature deviation from mean | °C |
-| `Precip_Anomaly` | Precipitation deviation from mean | mm |
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Temp_Lag_7d` | 7-day lagged temperature | Delayed temperature effect | °C |
+| `Temp_Lag_14d` | 14-day lagged temperature | Extended lag effect | °C |
+| `Precip_Lag_7d` | 7-day lagged precipitation | Delayed precipitation effect | mm |
+| `Precip_Lag_14d` | 14-day lagged precipitation | Extended precipitation lag | mm |
+| `Temp_Anomaly` | Deviation from 30-day mean | Temperature anomaly | °C |
+| `Precip_Anomaly` | Deviation from 30-day mean | Precipitation anomaly | mm |
+
+**Note**: Lag effects are important for capturing delayed relationships between climate and disease.
 
 ---
 
 ## Summary Indicators (3 variables)
 
-| Variable | Description | Unit |
-|----------|-------------|------|
-| `Days_Data` | Number of days with data | days |
-| `Valid_Data_Flag` | Data quality flag (1=good) | 0/1 |
-| `Processing_Status` | Processing status | text |
+| Variable | Description | Scientific Relevance | Unit |
+|----------|-------------|---------------------|------|
+| `Days_Data` | Days with satellite data | Data completeness | days |
+| `Valid_Data_Flag` | Data quality (1=good) | Reliability indicator | 0/1 |
+| `Processing_Status` | Processing outcome | Error identification | text |
 
 ---
 
-## Default Thresholds
+## Default Thresholds Summary
 
-| Threshold | Value | Used For |
-|-----------|-------|----------|
-| Hot day | > 30°C | Hot_Days_Count |
-| Very hot day | > 35°C | Very_Hot_Days |
-| Cold day | < 15°C | Cold_Days_Count |
-| Ideal temp | 20-30°C | Ideal_Days |
-| Heavy rain | > 10mm | Heavy_Rain_Days |
-| Very heavy rain | > 25mm | Very_Heavy_Rain_Days |
-| Moderate rain | 5-10mm | Moderate_Rain_Days |
-| High humidity | > 80% | High_Humidity_Days |
-| Low humidity | < 40% | Low_Humidity_Days |
-| Calm wind | < 2 m/s | Calm_Days |
-| Windy | > 5 m/s | Windy_Days |
-| Tropical night | Tmin > 20°C | Tropical_Nights |
-| Warm night | Tmin > 25°C | Warm_Nights |
-| Heat stress | HI > 35 | Heat_Stress_Days |
-
----
-
-## Variable Count Summary
-
-| Category | Count |
-|----------|-------|
-| Metadata | 7 |
-| Temperature | 22 |
-| Precipitation | 22 |
-| Humidity | 13 |
-| Wind | 10 |
-| Interactions | 12 |
-| Disease Indices | 13 |
-| Composites | 10 |
-| Temporal | 4 |
-| Lagged | 6 |
-| Summary | 3 |
-| **TOTAL** | **122 variables** |
+| Category | Threshold | Variable |
+|----------|-----------|----------|
+| Temperature | > 30°C | Hot_Days_Count |
+| Temperature | > 35°C | Very_Hot_Days |
+| Temperature | < 15°C | Cold_Days_Count |
+| Temperature | 20-30°C | Ideal_Days |
+| Precipitation | > 10mm | Heavy_Rain_Days |
+| Precipitation | > 25mm | Very_Heavy_Rain_Days |
+| Precipitation | 5-10mm | Moderate_Rain_Days |
+| Humidity | > 80% | High_Humidity_Days |
+| Humidity | < 40% | Low_Humidity_Days |
+| Wind | < 2 m/s | Calm_Days |
+| Wind | > 5 m/s | Windy_Days |
+| Combined | Tmin > 20°C | Tropical_Nights |
+| Combined | T > 25 & RH > 70% | Summer_Season |
+| Combined | HI > 35°C | Heat_Stress_Days |
 
 ---
 
 ## Usage Notes
 
-1. **Missing Data**: Variables may be `null` if insufficient daily data
-2. **Data Quality**: Check `Valid_Data_Flag` (1 = ≥25 days of data)
-3. **Thresholds**: Can be modified in source code for custom definitions
-4. **Derived Variables**: Some indices are estimates based on empirical relationships
+### Data Quality
+1. Filter records with `Valid_Data_Flag = 0` for analysis
+2. Minimum 25 days recommended for reliable statistics
+3. Check `Processing_Status` for API errors
+
+### Variable Selection by Research Question
+
+| Research Question | Recommended Variables |
+|------------------|---------------------|
+| What drives transmission? | EIP_Days, Vector_Capacity, Transmission_Risk_Proxy |
+| Where is risk highest? | Outbreak_Risk_30d, Climate_Suitability_Index, IR_Score |
+| When does transmission peak? | Season, Mosquit_Dev_Days, Persistence_Days |
+| How do extremes affect risk? | Hot_Days_Count, Heavy_Rain_Days, Dry_Days_Streak |
+| Which regions need intervention? | Regional aggregates of Vector_Capacity, Outbreak_Risk_30d |
+
+### Statistical Considerations
+1. Non-parametric tests recommended for non-normal distributions
+2. Account for spatial autocorrelation in regional analysis
+3. Consider lagged effects in time-series modeling
+4. Report effect sizes alongside significance tests
 
 ---
 
 ## References
 
-- EIP calculations based on standard entomological literature
-- Heat index using NWS apparent temperature formula
-- Vector biology indices derived from mosquito ecology studies
+1. Craig MH, et al. (1999). Climate change and malaria risk. *Parasitology Today*
+2. Paaijmans KP, et al. (2009). Temperature variation and malaria transmission. *PNAS*
+3. World Health Organization. (2018). Climate change and health.
+4. NASA Langley Research Center. POWER Project Documentation.
