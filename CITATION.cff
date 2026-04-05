@@ -1,23 +1,26 @@
 cff-version: 1.2.0
 message: "If you use this toolkit in your research, please cite it as follows."
 type: software
-title: "Epidemiological Climate Toolkit"
-abstract: "Python toolkit for epidemiological climate analysis using satellite-based climate data."
+title: "Climate Epidemiology Modeling Toolkit"
+abstract: "Python toolkit for climate data analysis in infectious disease epidemiology modeling. Computes 122 climate and epidemiological variables including EIP, vector capacity, and transmission risk metrics."
 authors:
   - name: "Research Community"
-version: "1.0.0"
+version: "2.0.0"
 date-released: "2024-01-01"
-repository-code: "https://github.com/Infinitysouls/epidemiological-climate-toolkit"
-url: "https://github.com/Infinitysouls/epidemiological-climate-toolkit"
+repository-code: "https://github.com/Infinitysouls/climate-epidemiology-modeling"
+url: "https://github.com/Infinitysouls/climate-epidemiology-modeling"
 license: MIT
 keywords:
   - public-health
   - epidemiology
+  - infectious-disease
   - climate-data
-  - health-surveillance
+  - disease-modeling
+  - vector-biology
+  - climate-epidemiology
   - python
   - epidemiological-research
-commit: "initial"
+commit: "v2.0"
 version-control:
   type: git
-  url: "https://github.com/Infinitysouls/epidemiological-climate-toolkit"
+  url: "https://github.com/Infinitysouls/climate-epidemiology-modeling"

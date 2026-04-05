@@ -140,12 +140,39 @@ See [docs/ETHICS_GUIDELINES.md](docs/ETHICS_GUIDELINES.md) for full guidelines.
 
 If you use this toolkit in your research, please cite:
 
+### BibTeX
 ```bibtex
-@software{climate_epidemiology_modeling,
+@software{climate_epidemiology_modeling_2024,
   title = {Climate Epidemiology Modeling Toolkit},
+  version = {2.0},
   author = {Research Community},
   year = {2024},
-  url = {https://github.com/Infinitysouls/climate-epidemiology-modeling}
+  month = {January},
+  url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},
+  license = {MIT}
+}
+```
+
+### APA 7th Edition
+```
+Research Community. (2024). Climate Epidemiology Modeling Toolkit (Version 2.0) 
+[Computer software]. GitHub. https://github.com/Infinitysouls/climate-epidemiology-modeling
+```
+
+### IEEE
+```
+"Climate Epidemiology Modeling Toolkit," Research Community, Version 2.0, Jan. 2024. 
+[Online]. Available: https://github.com/Infinitysouls/climate-epidemiology-modeling
+```
+
+### Harvard
+```
+@online{climate2024,
+  author = {Research Community},
+  title = {Climate Epidemiology Modeling Toolkit},
+  year = {2024},
+  url = {https://github.com/Infinitysouls/climate-epidemiology-modeling},
+  accessdate = {January 2024}
 }
 ```
 
