@@ -1,13 +1,32 @@
 import argparse
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 import csv
 import time
 import os
 import math
 from datetime import datetime, timedelta
 from collections import defaultdict
+import concurrent.futures
+import threading
 
 CLIMATE_API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
+
+def get_retry_session():
+    session = requests.Session()
+    retry = Retry(
+        total=3,
+        backoff_factor=1,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"]
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    return session
+
+GLOBAL_SESSION = get_retry_session()
 PARAMETERS = ["T2M", "PRECTOTCORR", "RH2M", "WS2M"]
 
 DEFAULT_INPUT = os.path.join(os.path.dirname(__file__), "..", "data.csv")
@@ -66,6 +85,64 @@ def get_season(month):
         return "post_monsoon"
 
 
+def fetch_open_meteo(lat, lon, start_date_str, end_date_str):
+    """Fallback to Open-Meteo API"""
+    url = f"https://archive-api.open-meteo.com/v1/archive"
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "start_date": start_date_str,
+        "end_date": end_date_str,
+        "daily": "temperature_2m_mean,precipitation_sum,wind_speed_10m_max,wind_speed_10m_mean",
+        "hourly": "relative_humidity_2m",
+        "timezone": "UTC"
+    }
+
+    try:
+        response = GLOBAL_SESSION.get(url, params=params, timeout=30)
+        if response.status_code != 200:
+            return None
+        data = response.json()
+    except Exception:
+        return None
+
+    daily_data = defaultdict(dict)
+
+    if 'daily' in data and 'time' in data['daily']:
+        times = data['daily']['time']
+        t2m = data['daily'].get('temperature_2m_mean', [])
+        precip = data['daily'].get('precipitation_sum', [])
+        ws2m = data['daily'].get('wind_speed_10m_mean', [])
+
+        for i, t in enumerate(times):
+            date_key = t.replace('-', '')
+            if i < len(t2m) and t2m[i] is not None:
+                daily_data[date_key]["T2M"] = t2m[i]
+            if i < len(precip) and precip[i] is not None:
+                daily_data[date_key]["PRECTOTCORR"] = precip[i]
+            if i < len(ws2m) and ws2m[i] is not None:
+                daily_data[date_key]["WS2M"] = ws2m[i]
+
+    if 'hourly' in data and 'time' in data['hourly']:
+        hr_times = data['hourly']['time']
+        hr_rh = data['hourly'].get('relative_humidity_2m', [])
+
+        rh_sums = defaultdict(float)
+        rh_counts = defaultdict(int)
+
+        for i, t in enumerate(hr_times):
+            date_key = t.split('T')[0].replace('-', '')
+            if i < len(hr_rh) and hr_rh[i] is not None:
+                rh_sums[date_key] += hr_rh[i]
+                rh_counts[date_key] += 1
+
+        for date_key in daily_data:
+            if rh_counts[date_key] > 0:
+                daily_data[date_key]["RH2M"] = rh_sums[date_key] / rh_counts[date_key]
+
+    return dict(daily_data) if daily_data else None
+
+
 def fetch_daily_data(lat, lon, start_date_str, end_date_str):
     """Fetch raw daily data from API"""
     start_fmt = start_date_str.replace("-", "")
@@ -81,36 +158,37 @@ def fetch_daily_data(lat, lon, start_date_str, end_date_str):
         "format": "JSON",
     }
 
-    response = requests.get(CLIMATE_API_URL, params=params, timeout=30)
-
-    if response.status_code != 200:
-        return None
-
     try:
-        data = response.json()
-    except:
-        return None
+        response = GLOBAL_SESSION.get(CLIMATE_API_URL, params=params, timeout=30)
+        if response.status_code == 200:
+            try:
+                data = response.json()
+                if "properties" in data and "parameter" in data["properties"]:
+                    param_data = data["properties"]["parameter"]
 
-    if "properties" not in data or "parameter" not in data["properties"]:
-        return None
+                    daily_data = defaultdict(dict)
+                    for date_key, value in param_data.get("T2M", {}).items():
+                        if isinstance(value, (int, float)):
+                            daily_data[date_key]["T2M"] = value
+                    for date_key, value in param_data.get("PRECTOTCORR", {}).items():
+                        if isinstance(value, (int, float)):
+                            daily_data[date_key]["PRECTOTCORR"] = value
+                    for date_key, value in param_data.get("RH2M", {}).items():
+                        if isinstance(value, (int, float)):
+                            daily_data[date_key]["RH2M"] = value
+                    for date_key, value in param_data.get("WS2M", {}).items():
+                        if isinstance(value, (int, float)):
+                            daily_data[date_key]["WS2M"] = value
 
-    param_data = data["properties"]["parameter"]
+                    if daily_data:
+                        return dict(daily_data)
+            except:
+                pass
+    except requests.exceptions.RequestException:
+        pass
 
-    daily_data = defaultdict(dict)
-    for date_key, value in param_data.get("T2M", {}).items():
-        if isinstance(value, (int, float)):
-            daily_data[date_key]["T2M"] = value
-    for date_key, value in param_data.get("PRECTOTCORR", {}).items():
-        if isinstance(value, (int, float)):
-            daily_data[date_key]["PRECTOTCORR"] = value
-    for date_key, value in param_data.get("RH2M", {}).items():
-        if isinstance(value, (int, float)):
-            daily_data[date_key]["RH2M"] = value
-    for date_key, value in param_data.get("WS2M", {}).items():
-        if isinstance(value, (int, float)):
-            daily_data[date_key]["WS2M"] = value
-
-    return dict(daily_data)
+    # Fallback to Open-Meteo
+    return fetch_open_meteo(lat, lon, start_date_str, end_date_str)
 
 
 def compute_temperature_stats(daily_data):
@@ -173,19 +251,24 @@ def compute_temperature_stats(daily_data):
     )
 
     if temps:
-        mean_t = sum(temps) / len(temps)
         n = len(temps)
         if n > 2:
-            m = (
-                n * sum(i * t for i, t in enumerate(temps)) - sum(range(n)) * sum(temps)
-            ) / (n * sum(i**2 for i in range(n)) - (sum(range(n))) ** 2)
-            stats["Temp_Skewness"] = round(m, 4) if m else 0
+            mean_t = sum(temps) / n
+            m2 = sum((t - mean_t) ** 2 for t in temps) / n
+            m3 = sum((t - mean_t) ** 3 for t in temps) / n
+            m4 = sum((t - mean_t) ** 4 for t in temps) / n
+            if m2 > 0:
+                stats["Temp_Skewness"] = round(m3 / (m2 ** 1.5), 4)
+                stats["Temp_Kurtosis"] = round((m4 / (m2 ** 2)) - 3, 4)
+            else:
+                stats["Temp_Skewness"] = 0
+                stats["Temp_Kurtosis"] = 0
         else:
             stats["Temp_Skewness"] = 0
+            stats["Temp_Kurtosis"] = 0
     else:
         stats["Temp_Skewness"] = 0
-
-    stats["Temp_Kurtosis"] = 0
+        stats["Temp_Kurtosis"] = 0
 
     return stats
 
@@ -703,10 +786,12 @@ def main():
     print(f"Loaded {len(records)} records")
     print()
 
-    results = []
+    results = [None] * len(records)
     success_count = 0
+    success_lock = threading.Lock()
 
-    for idx, row in enumerate(records):
+    def process_record(idx, row):
+        nonlocal success_count
         date_str = row["[Date of Event]"]
         lat = row["[Latitude]"]
         lon = row["[Longitude]"]
@@ -717,7 +802,7 @@ def main():
             event_date = datetime.strptime(date_str[:10], "%Y-%m-%d")
         except:
             print(f"Skipping row {idx + 1}: Invalid date format")
-            continue
+            return
 
         start_date = (event_date - timedelta(days=30)).strftime("%Y-%m-%d")
         end_date = event_date.strftime("%Y-%m-%d")
@@ -741,16 +826,18 @@ def main():
 
             metrics = compute_all_metrics(daily_data, event_date)
             result.update(metrics)
-            results.append(result)
-            success_count += 1
+            results[idx] = result
+
+            with success_lock:
+                success_count += 1
 
             print(
-                f"  OK: {len(daily_data)} days, Temp: {metrics.get('Temp_Mean', 'N/A')}C, "
-                f"Precip: {metrics.get('Precip_Total', 'N/A')}mm, Variables: {len(result)}"
+                f"  OK [{idx + 1}/{len(records)}]: {len(daily_data)} days, Temp: {metrics.get('Temp_Mean', 'N/A')}C, "
+                f"Precip: {metrics.get('Precip_Total', 'N/A')}mm"
             )
         else:
             print(
-                f"  ERROR: Insufficient data ({len(daily_data) if daily_data else 0} days)"
+                f"  ERROR [{idx + 1}/{len(records)}]: Insufficient data ({len(daily_data) if daily_data else 0} days)"
             )
             result = {
                 "Date of Event": date_str[:10],
@@ -764,9 +851,16 @@ def main():
                 "Valid_Data_Flag": 0,
                 "Processing_Status": "Insufficient data",
             }
-            results.append(result)
+            results[idx] = result
 
         time.sleep(0.3)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        futures = [executor.submit(process_record, idx, row) for idx, row in enumerate(records)]
+        concurrent.futures.wait(futures)
+
+    # Filter out None from skipped rows
+    results = [r for r in results if r is not None]
 
     if results:
         with open(output_csv, "w", newline="", encoding="utf-8") as f:
